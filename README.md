@@ -29,5 +29,6 @@ pip install -r requirements.txt
 
 HTML files are located in the folder
 ```
-/websites/
+/
 ```
+they have to be in the root folder (because of GitHub configuration).
