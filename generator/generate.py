@@ -2,6 +2,7 @@ from pathlib import Path
 import shutil
 from typing import List, Union
 import pkgutil
+from os import listdir
 
 import crinita as cr
 
@@ -19,7 +20,7 @@ for single_file in pkgutil.walk_packages(['.']):
 sites = cr.Sites(ENTITIES)
 # ========= CONFIGURATION =========
 # Path to outputs
-output_directory: Path = Path('../websites/')
+output_directory: Path = Path('../')
 # Resource directory
 resource_directory: Path = Path('RESOURCES')
 
@@ -46,8 +47,19 @@ cr.Config.site_home_url = "/"
 
 # Remove existing content
 if output_directory.exists():
-    shutil.rmtree(output_directory)
-output_directory.mkdir()
+    if output_directory.joinpath('images').exists():
+        shutil.rmtree(output_directory.joinpath('images'))
+    if output_directory.joinpath('styles.css').exists():
+        shutil.rmtree(output_directory.joinpath('styles.css'))
+    onlyfiles = [f for f in listdir(output_directory) if output_directory.joinpath(f).is_file() and cr.Config.site_file_suffix in f]
+    for file in onlyfiles:
+        output_directory.joinpath(file).unlink()
+    if output_directory.joinpath("robots.txt").exists():
+        output_directory.joinpath("robots.txt").unlink()
+    if output_directory.joinpath("sitemap.xml").exists():
+        output_directory.joinpath("sitemap.xml").unlink()
+    if output_directory.joinpath("style.css").exists():
+        output_directory.joinpath("style.css").unlink()
 
 # Generate sites
 sites.generate_pages(output_directory)
