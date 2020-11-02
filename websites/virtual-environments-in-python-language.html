@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IT Blog | Virtual environments in Python language</title>
+    <meta name="description" content="Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.">
+    <meta name="keywords" content="Virtual Environment, Programming, Python, Performance, Essentials">
+    <meta name="author" content="David Salac">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <nav>
+            <a href="/" id="logo">
+                <span id="icon">&nbsp;</span>
+                IT Blog
+            </a>
+            
+<ul>
+    
+        <li>
+            <a href="/">HOME</a>
+        </li>
+    
+        <li>
+            <a href="about.html">About</a>
+        </li>
+    
+        <li>
+            <a href="contact.html">Contact</a>
+        </li>
+    
+        <li>
+            <a href="https://www.github.com/david-salac/">My GitHub</a>
+        </li>
+    
+</ul>
+
+        </nav>
+        <section>
+            <main>
+                <div id="page-content">
+                    
+<header>
+    <h1>Virtual environments in Python language</h1>
+    
+        <span class="date">★ Posted on August 14, 2020</span>
+    
+</header>
+<article>
+    
+        <div class="illustration" style="background-image: url('images/python_venv_big.jpg')"></div>
+    
+    <div class="content">
+        There are many tools in Python for creating and managing virtual environments. This article tends to analyze native virtual environment (created using venv command). Another simplified and more user-friendly approach is to use Anaconda software (using command conda).
+
+<h2>What are the virtual environments? </h2>
+<p>One of the crucial issue for Python developers is called virtual environment. Basically, it is helpful when you need to install (in order to run or use) Python's packages without affecting the system packages. Typically for testing or developing some applications. Managing of the virtual environment is typically one of the common features of the IDE (e.g. JetBrains <strong>PyCharm</strong> deal with this issue in a very efficient way). However, it is helpful to know how to manage it directly from the command line.</p>
+
+<h2>Native virtual environment (command venv)</h2>
+<p>This is the oldest approach for managing virtual environments. It is also the first choice option if you need something really simple. However, it has its cons as well. Many (even frequently used) packages require system-level dependencies. A typical example is a famous package called pyplot that provides helpful tools for plotting of various types of graphs.</p>
+
+<h3>How to install virtualenv</h3>
+<p>Depends on the machine you are using. For the Ubuntu, use just:</p>
+<pre class="code"><code>sudo apt install python3-virtualenv</code></pre>
+<p><em>Manual for Windows is below this section.</em></p>
+<h3>How to use native venv command (on Linux)</h3>
+<ol>
+<li><p>The virtual environment has to be created. Use the command:</p>
+<pre class="code"><code>python3 -m venv PATH</code></pre>
+<p>Where the <strontg>PATH</strontg> argument is typically equal to '.' (current folder).</p>
+</li>
+<li><p>After the creation, you have to activate it. Go to the folder where the virtual environment is located and write:</p>
+<pre class="code"><code>. bin/activate</code></pre>
+</li>
+<li>
+<p>If the terminal is now displaying something like:</p>
+<pre class="code"><code>(testvenv) USER@MACHINE:~/PATH_TO_ENV$ </code></pre>
+<p>You can start to use your virtual environment.</p>
+
+<p>Your typical first command in the virtual environment would be to install some requirements.</p> <p>Use, for example:</p>
+<pre class="code"><code>pip3 install -r requirements.txt</code></pre>
+<p>For installing requirements from the requirements.txt file (standard approach). Or you can simply install system packages using pip command directly:</p>
+<pre class="code"><code>pip3 install NAME_OF_PACKAGE</code></pre>
+</li>
+<li>
+<p>If you want to deactivate the virtual environment, use the commend:</p>
+<pre class="code"><code>deactivate</code></pre>
+<p>You should see the standard terminal window now.</p>
+</li>
+</ol>
+
+<p>It is helpful to know that the virtual environment has the same name as the folder where it is located. You can also use the activated environment in any folder you need. The best approach is to use dedicated sub-folder of the Python project for the virtual environment (and add its content to the .gitignore file).</p>
+<h3>How to work on Windows</h3>
+<p>If your system is Windows, use the following logic and run the following commands in Windows Power Shell:</p>
+<ol>
+<li><strong>Run Windows Power Shell as Administrator (right-click on it and run it with required privileges)</strong></li>
+<li><code>pip install virtualenv</code></li>
+<li><code>pip install virtualenvwrapper-win</code></li>
+<li><code>mkvirtualenv 'PATH_TO_VENV'</code></li>
+<li><code>cd PATH_TO_VENV</code></li>
+<li><code>Set-ExecutionPolicy AllSigned</code> <em>(press Y and Enter)</em></li>
+<li><code>Set-ExecutionPolicy RemoteSigned</code> <em>(press Y and Enter)</em></li>
+<li><code>.\Scripts\activate</code> <em>(this activate your virtual environment)</em></li>
+<li><strong>use the virtual environment as needed now...</strong></li>
+<li><code>deactivate</code> <em>(to exit)</em></li>
+</ol>
+
+<h2>Anaconda (command conda)</h2>
+<p>Anaconda presents a simplified way of how to manage system packages. It also provides functionality to install many popular packages without installing system dependencies first. Anaconda is one of the most popular tools for data scientists.</p>
+
+
+        
+            <span class="tag-cloud">❋ Tags:
+                <a href="tag-virtual-environment.html">Virtual Environment</a>
+                <a href="tag-programming.html">Programming</a>
+                <a href="tag-python.html">Python</a>
+                <a href="tag-performance.html">Performance</a>
+                <a href="tag-essentials.html">Essentials</a>
+                
+            </span>
+        
+    </div>
+</article>
+                </div>
+
+                <aside>
+                    
+<h3>Recent posts</h3>
+<div class="separator"></div>
+<ul>
+    
+        <li><a href="how-to-replace-gdal-with-more-efficient-tools.html">How to replace GDAL with more efficient tools?</a></li>
+    
+        <li><a href="dimension-order-problem-when-storing-of-the-big-data.html">Dimension order problem when storing of the big data</a></li>
+    
+        <li><a href="new-python-library-for-exporting-formulas-to-excel-and-other-formats.html">New Python library for exporting formulas to Excel and other formats</a></li>
+    
+        <li><a href="virtual-environments-in-python-language.html">Virtual environments in Python language</a></li>
+    
+        <li><a href="prediction-of-renewable-energy-from-the-software-engineering-perspective.html">Prediction of renewable energy from the software engineering perspective</a></li>
+    
+</ul>
+
+                    
+<h3>Tags</h3>
+<div class="separator"></div>
+<ul class="tag-cloud">
+    
+        <li><a href="tag-design.html ">Design</a></li>
+    
+        <li><a href="tag-python.html ">Python</a></li>
+    
+        <li><a href="tag-big-data.html ">Big Data</a></li>
+    
+        <li><a href="tag-performance.html ">Performance</a></li>
+    
+        <li><a href="tag-geospatial.html ">Geospatial</a></li>
+    
+</ul>
+<div class="clear"></div>
+
+                    <h3>About</h3>
+<div class="separator"></div>
+<p>Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.<p>Generated using <a href="http://www.crinita.com/">Crinita</a> in version 0.0.6.</p></p>
+                </aside>
+                <div class="clear"></div>
+            </main>
+            <footer>
+                <p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />All the content is licensed under a <br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+            </footer>
+        </section>
+    </div>
+</body>
+</html>

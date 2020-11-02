@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IT Blog | New Python library for exporting formulas to Excel and other formats</title>
+    <meta name="description" content="Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.">
+    <meta name="keywords" content="Data Visualisation, Exporting, Python, Design, Excel">
+    <meta name="author" content="David Salac">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <nav>
+            <a href="/" id="logo">
+                <span id="icon">&nbsp;</span>
+                IT Blog
+            </a>
+            
+<ul>
+    
+        <li>
+            <a href="/">HOME</a>
+        </li>
+    
+        <li>
+            <a href="about.html">About</a>
+        </li>
+    
+        <li>
+            <a href="contact.html">Contact</a>
+        </li>
+    
+        <li>
+            <a href="https://www.github.com/david-salac/">My GitHub</a>
+        </li>
+    
+</ul>
+
+        </nav>
+        <section>
+            <main>
+                <div id="page-content">
+                    
+<header>
+    <h1>New Python library for exporting formulas to Excel and other formats</h1>
+    
+        <span class="date">★ Posted on August 16, 2020</span>
+    
+</header>
+<article>
+    
+        <div class="illustration" style="background-image: url('images/portable_spreadsheet_big.jpg')"></div>
+    
+    <div class="content">
+        One of the typical challenges when doing export of numerical computations is how to include the way how you achieve the results. Typically if results should be in Excel sheet at the end, you want to see the computation formula if you click on each cell. There is a native way using some Excel driver (like XlsxWriter) available in Python, but if you are dealing with a big Excel sheet, it becomes quite inconvenient. This article is about a new library called Portable Spreadsheet that can easily overcome these problems.
+<h2>Simple problem</h2>
+<p>Say that you have an e-shop written in Python and want to export some simple Excel sheet that summarizes revenues per each category. There can be just two columns, one representing the category and another one representing revenues. </p> 
+
+<figure>
+<img alt="Excel" src="images/excel.png">
+<figcaption>Simple problem definition</figcaption>
+</figure>
+
+<p>In the end, you want to see some aggregation functions, like the sum of all revenues, the article with minimal revenue, and say the sum of food and drinks as a new category (called grocery). What is crucial, the spreadsheet should be editable, it means, each computation should be exported as a formula (as illustrated in the figure above).</p>
+<h2>Approach using available Excel drivers</h2>
+<p>You can tackle this issue directly using some driver for Excel available in Python. Let's say you choose XlsxWriter as your driver. Then you have to define each cell value and for the computations the way how you compute it plus the actual value after the computation. The code you have to write would follow the logic:</p>
+<pre class="code"><code>import xlsxwriter
+workbook = xlsxwriter.Workbook('revenues.xlsx')
+worksheet = workbook.add_worksheet()
+food_rev = 1000
+drinks_rev = 100
+headphones_rev = 300
+# Write categories
+worksheet.write(0, 0, "Food")
+worksheet.write(1, 0, "Drinks")
+worksheet.write(2, 0, "Headphones")
+# Write revenues
+worksheet.write(0, 1, food_rev)
+worksheet.write(1, 1, drinks_rev)
+worksheet.write(2, 1, headphones_rev)
+# Write results
+worksheet.write_formula(3, 1, "=SUM(B1:B3)",
+                        value=(food_rev + drinks_rev + headphones_rev))
+worksheet.write_formula(4, 1, "=MIN(B1:B3)",
+                        value=min(food_rev, drinks_rev, headphones_rev))
+worksheet.write_formula(5, 1, "=B1+B2",
+                        value=food_rev + drinks_rev)
+# Close the sheet (in order to write it to the file)
+workbook.close()
+</code></pre>
+
+<p>As you can see the code is not simple (nor complete) and you already had to hardwire the positions of each cell in it. You also had to use values for computations multiple times as you cannot directly use the values in the cell.</p>
+<p>What more is that when you decide to export to the different format (say JSON), you have to write this code again.</p>
+<h2>Portable Spreadsheet approach</h2>
+<p>Another way how to deal with all these issues elegantly is to use a library called Portable Spreadsheet (installable easily via pip install portable-spreadsheet). Consider the following code as the opposite of the previous one:</p>
+
+<pre class="code"><code>import portable_spreadsheet as ps
+
+# Create the spreadsheet with the correct labels
+sheet = ps.Spreadsheet.create_new_sheet(
+    6, 1,
+    rows_labels=['Food', 'Drink', 'Headphones', 'Total', 'Minimal', 'Grocery'],
+    columns_labels=['Revenue']
+)
+# Set the values
+sheet.loc['Food', 'Revenue'] = 15000
+sheet.loc['Drink', 'Revenue'] = 16000
+sheet.loc['Headphones', 'Revenue'] = 1000
+# Set the computations
+sheet.loc['Total', 'Revenue'] = sheet.loc['Food':'Total', 'Revenue'].sum()
+sheet.loc['Minimal', 'Revenue'] = sheet.loc['Food':'Total', 'Revenue'].min()
+sheet.loc['Grocery', 'Revenue'] = sheet.loc['Food', 'Revenue'] +                                   sheet.loc['Drink', 'Revenue']
+# Export result to Excel
+sheet.to_excel("rev.xlsx")
+# Export result to JSON
+json = sheet.to_json()</code></pre>
+
+
+<p>As you can see, you completely removed redundancies in the code, it is shorter, easily readable, and what's best, you can export not only to Excel but to every reasonable format (JSON, CSV, HTML, etc.). If you are familiar with Pandas DataFrame concept, you can see the straight motivation.</p>
+<h3>How does it work under the hood?</h3>
+<p>Internally, the principle of the Portable Spreadsheet library lies in the word constructing algorithm. Basically, each formula (in Excel, JSON, etc.) can be considered as a world in some language. This language is the Context-Free language defined by Context-Free grammar (see Chomsky hierarchy).</p>
+<p>This practically means that all that is needed is the definition of the prefixes and suffices for each operation. Operands here are the coordinates of the cells.</p>
+<p>So, if you want to compute the sum of the items in the column, your operands are the coordinates of slice start and end, the operation is the sum (you have two inputs: operation and operands).</p>
+
+<figure>
+<img alt="Prefixes and suffixes of operation and operands" src="images/pref_suf.png">
+<figcaption>Prefixes and suffixes of operation and operands</figcaption>
+</figure>
+
+<p>In the picture above, you can see prefixes and suffixes. Some prefixes and suffixes are empty sets. This picture is just an illustration, but it shows how each word can be constructed. All these prefixes and suffixes (and other rules) are defined as the grammars for each language in a separate file.</p>
+<p>The rest of the Portable Spreadsheet library is simple storing of words for each cell defined by its coordinates. Each word (like that one with the sum mentioned above) can be the part of the other word (acting as an operand). This approach allows defining grammars for each language that should be part of the export (like native language description, Python language, Excel).</p>
+
+<h2>Summary </h2>
+<p>The purpose of this article is to present a new library for Python called Portable Spreadsheet (pip install portable-spreadsheet) that allows you to easily export computation formulas in a spreadsheet to various type of formats (mainly Excel and JSON). So you can see how each computation in a spreadsheet is done without manually coding each cell. </p>
+
+        
+            <span class="tag-cloud">❋ Tags:
+                <a href="tag-data-visualisation.html">Data Visualisation</a>
+                <a href="tag-exporting.html">Exporting</a>
+                <a href="tag-python.html">Python</a>
+                <a href="tag-design.html">Design</a>
+                <a href="tag-excel.html">Excel</a>
+                
+            </span>
+        
+    </div>
+</article>
+                </div>
+
+                <aside>
+                    
+<h3>Recent posts</h3>
+<div class="separator"></div>
+<ul>
+    
+        <li><a href="how-to-replace-gdal-with-more-efficient-tools.html">How to replace GDAL with more efficient tools?</a></li>
+    
+        <li><a href="dimension-order-problem-when-storing-of-the-big-data.html">Dimension order problem when storing of the big data</a></li>
+    
+        <li><a href="new-python-library-for-exporting-formulas-to-excel-and-other-formats.html">New Python library for exporting formulas to Excel and other formats</a></li>
+    
+        <li><a href="virtual-environments-in-python-language.html">Virtual environments in Python language</a></li>
+    
+        <li><a href="prediction-of-renewable-energy-from-the-software-engineering-perspective.html">Prediction of renewable energy from the software engineering perspective</a></li>
+    
+</ul>
+
+                    
+<h3>Tags</h3>
+<div class="separator"></div>
+<ul class="tag-cloud">
+    
+        <li><a href="tag-design.html ">Design</a></li>
+    
+        <li><a href="tag-python.html ">Python</a></li>
+    
+        <li><a href="tag-big-data.html ">Big Data</a></li>
+    
+        <li><a href="tag-performance.html ">Performance</a></li>
+    
+        <li><a href="tag-geospatial.html ">Geospatial</a></li>
+    
+</ul>
+<div class="clear"></div>
+
+                    <h3>About</h3>
+<div class="separator"></div>
+<p>Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.<p>Generated using <a href="http://www.crinita.com/">Crinita</a> in version 0.0.6.</p></p>
+                </aside>
+                <div class="clear"></div>
+            </main>
+            <footer>
+                <p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />All the content is licensed under a <br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+            </footer>
+        </section>
+    </div>
+</body>
+</html>
