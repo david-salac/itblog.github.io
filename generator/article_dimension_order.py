@@ -59,5 +59,3 @@ ENTITY = cr.Article(
     content=content,
     lead=lead
 )
-
-
