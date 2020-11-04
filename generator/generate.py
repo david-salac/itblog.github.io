@@ -29,6 +29,7 @@ cr.Config.templates_path = Path('templates')
 # Configure blog name
 cr.Config.site_title = "IT Blog"
 cr.Config.site_logo_text = "IT Blog"
+cr.Config.site_title_homepage = "Personal blog"
 cr.Config.append_to_menu = (
     {'title': 'HOME', 'url': '__HOME_PAGE__', 'menu_position': 0},
     {'title': 'My GitHub', 'url': 'https://www.github.com/david-salac/', 'menu_position': 30},
