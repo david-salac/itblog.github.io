@@ -45,6 +45,9 @@ cr.Config.default_meta_meta_author = "David Salac"
 cr.Config.default_meta_keywords = "Professional blog, Information Technologies, Data Science, Data Engineering, Software Engineering"
 cr.Config.site_home_url = "/"
 cr.Config.site_map_url_prefix = "http://itblog.uk/"
+cr.Config.robots_txt = """User-agent: *
+Allow: /
+Sitemap: http://itblog.uk/sitemap.xml"""
 # =================================
 
 # Remove existing content
