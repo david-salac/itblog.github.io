@@ -29,7 +29,7 @@ ENTITY = cr.Article(
     large_image_path="images/blog_big.jpg",
     small_image_path="images/blog_small.jpg",
     date=datetime.datetime(2020, 11, 3),
-    tags=[cr.Tag('Websites', 'websites'),
+    tags=[cr.Tag('Web application', 'web-application'),
           cr.Tag('Programming', 'programming'),
           cr.Tag('Python', 'python'),
           cr.Tag('Design', 'design'),

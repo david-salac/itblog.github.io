@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IT Blog | Pros and Cons of using xarray when accessing NetCDF files</title>
+    <meta name="description" content="Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.">
+    <meta name="keywords" content="xarray, Big Data, Python, Geospatial, NetCDF">
+    <meta name="author" content="David Salac">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <nav>
+            <a href="/" id="logo">
+                <span id="icon">&nbsp;</span>
+                IT Blog
+            </a>
+            
+<ul>
+    
+        <li>
+            <a href="/">HOME</a>
+        </li>
+    
+        <li>
+            <a href="about.html">About</a>
+        </li>
+    
+        <li>
+            <a href="contact.html">Contact</a>
+        </li>
+    
+        <li>
+            <a href="https://www.github.com/david-salac/">My GitHub</a>
+        </li>
+    
+</ul>
+
+        </nav>
+        <section>
+            <main>
+                <div id="page-content">
+                    
+<header>
+    <h1>Pros and Cons of using xarray when accessing NetCDF files</h1>
+    
+        <span class="date">★ Posted on April 10, 2020</span>
+    
+</header>
+<article>
+    
+        <div class="illustration" style="background-image: url('images/globe_big.jpg')"></div>
+    
+    <div class="content">
+        Famous library xarray is more or less standard in the data analyst branch. During the last few years, it has become incredibly popular. It has been deployed in many projects often without any careful decision if it is needed or if there is any other way how to treat the issue. One of the essential xarray functionality is the reading and writing to the NetCDF files. This is also a focus of this article where at the end you should be capable of making the inform decision whether or not use xarray.
+
+<h2>Pros of the xarray</h2>
+<p>One of the fundamental pros of xarray is how it handles dimensions. If you have ever used default driver (Python package NetCDF4) you know exactly how clumsy you have to deal with this issue. Consider the following code that read from the NetCDF4 variable with unknown dimension order (having dimension longitude, latitude, time):</p>
+
+<pre class="code"><code>import xarray
+file = xarray.open_dataset("FILE_PATH.nc")
+value = file['var'].sel(lon=3, lat=2, time="2016-12-30 00:00:00").values</code></pre>
+
+<p>
+As you can see, you do not have to care about the dimension order inside the NetCDF variable (which can easily vary from file to file). All the values are also correctly interpreted (as you can see in the 'time' axes).</p>
+
+<p>
+For the comparison, if you want to achieve the same effect using only the native Python NetCDF4 driver, you have to follow the logic:</p>
+
+<pre class="code"><code>import netCDF4
+file = netCDF4.Dataset("FILE_PATH.nc")
+expected_dim_order = ('lon', 'lat', 'time')
+current_dim_order = file['var'].dimensions
+permutation_formula = [expected_dim_order.index(dim) for dim in current_dim_order]
+desired_index = [3, 2, 1]
+file_index = tuple(desired_index[i] for i in permutation_formula)
+value = file['var'][file_index]</code></pre>
+
+<p>
+This is the minimal code that is dimension order blind when the native driver is used. You can easily notice the much bigger complexity to receive the same effect. If you also wanted to have the smart reading on the time dimension, code would be much more complicated than this. Reading of the time series in some reasonable format (currently only pandas.DatetimeIndex) is also a problem. When the native driver is used, arguably the easiest way is the following one:</p>
+
+<pre class="code"><code>import pandas as pd
+import netCDF4
+import cftime
+nc = netCDF4.Dataset("FILE_PATH.nc")
+time_series = pd.to_datetime(cftime.num2pydate(nc['time'][:], nc['time'].units), utc=True)</code></pre>
+
+<p>
+If you do not have a UTC, you have to adjust it afterwards. Consider how elegant is the same code when xarray is used:</p>
+
+<pre class="code"><code>import xarray
+import pandas as pd
+file = xarray.open_dataset("FILE_PATH.nc")
+time_series = pd.DatetimeIndex(file['time'].values, tz="UTC")</code></pre>
+
+<p>
+Described examples are arguably the most famous ones. In both cases, xarray is the winner if it comes to simplicity and code readability.</p>
+
+
+<h2>If it is so, what is the problem? (Cons of xarray)</h2>
+<p>So far, so good, except that nothing is good. Despite a lot of nice features, xarray is actually very problematic. A few of the problems related to xarray are mentioned in this section.</p>
+
+<h3>Memory leaks</h3>
+<p>You open you nice dataset in xarray, do a few operations, close it. Nothings seems to be a problem. But there is one. Noone can be sure that the garbage collector will really collect reminders after your variable. This problem is especially problematic if you read and write to the NetCDF file inside some web application. Memory usage of the web-application expands more and more until the time when it is reset. That is, of course, very problematic (not only because of security). You can find some ways how to circumvent this issue (like using a separate process). But one way or another it is a very inconvenient feature of xarray.</p>
+
+<h3>Chunking</h3>
+<p>Whenever you work on the machine with limited resources (practically always outside the data-analysis world), you need to read variables in some reasonable-sized chunks. There are generally two ways how to treat this issue. The more complex one is read (or write) from (to) variable using Dask (or xarray running on Dask). This approach is useful if you process massive datasets, and if you exactly know what to expect inside each variable (and is good only for experienced professional). Another approach is to read the variable in slices. In these cases, xarray is basically useless because you absolutely cannot really on it, consider the following example:</p>
+
+<pre class="code"><code>value = file['var'].sel(lon=0, lat=0, time=slice(100, 1100)).values</code></pre>
+
+<p>
+You would expect that memory usage cannot exceed the value of memory usage for that 1000 items that you actually read. Reality is that xarray reads the whole variable into memory and slice it afterwards. That is unacceptable. Equivalent code that uses native driver works correctly:</p>
+
+<pre class="code"><code>value = file['var'][0, 0, slice(100, 1100)]</code></pre>
+
+<p>In this case, it is good to know that the keyword slice returns you an object that can be used for re-shuffling the dimension order described above.</p>
+
+<h3>Appending to the file</h3>
+<p>If it comes to writing in chunks to some variable, it is good to know that none xarray and the native driver does support multidimensional variables having one dimension unlimited. The native driver supports unlimited dimensions only in the 1D variables (xarray does not) and does not support unlimited dimension for any ND variables (N > 1). Unlimited dimensions are especially helpful if you need to append data to the file. Appending mode itself is currently not supported in xarray at all (native driver works without any problems in the 'a' mode).</p>
+
+<h3>Other inconveniences</h3>
+<p>There is also a lot of different things. One of the most famous ones is that you always have to be careful what you receive at the end if you use xarray. Sometimes it is a Dask object, and sometimes it can be a Numpy object. This is very inconvenient, and you have to read the documentation very carefully to avoid it. If it comes to types, you also cannot be sure how strings as "1" and other number literals (having type string) will be interpreted in the xarray world.</p>
+
+<p>It is also good to bear in mind that xarray does not interpret the value until you explicitly ask for it. This can lead to a very long pipeline that can cause memory and performance issues.</p>
+
+<p>Last but not least issue is related to a number of dependencies that are installed together with xarray. By default, it is six dependencies and many others, depending on what purpose you want to use it.</p>
+
+<h2>Summary</h2>
+<p>As xarray provides a lot of incredible features that can save time in development, it also contains a lot of pitfalls you have to be aware. Only a few of them are presented here (memory leaks, troubles with chunking, no possibility of appending to file, type misinterpretation, etc.). Generally speaking,  none of the described issues is critical enough to make xarray useless. On the other hand, it is good to make an inform decision before you choose to deploy anything relying on it. There is a lot of other tools that, combined together provides a safer alternative.</p>
+
+        
+            <span class="tag-cloud">❋ Tags:
+                <a href="tag-xarray.html">xarray</a>
+                <a href="tag-big-data.html">Big Data</a>
+                <a href="tag-python.html">Python</a>
+                <a href="tag-geospatial.html">Geospatial</a>
+                <a href="tag-netcdf.html">NetCDF</a>
+                
+            </span>
+        
+    </div>
+</article>
+                </div>
+
+                <aside>
+                    
+<h3>Recent posts</h3>
+<div class="separator"></div>
+<ul>
+    
+        <li><a href="optimizing-database-queries-not-only-in-django-orm.html">Optimizing database queries (not only) in Django ORM</a></li>
+    
+        <li><a href="suitable-ways-how-to-generate-complex-static-websites-using-python-language.html">Suitable ways how to generate complex static websites using Python language</a></li>
+    
+        <li><a href="how-to-replace-gdal-with-more-efficient-tools.html">How to replace GDAL with more efficient tools?</a></li>
+    
+        <li><a href="dimension-order-problem-when-storing-of-the-big-data.html">Dimension order problem when storing of the big data</a></li>
+    
+        <li><a href="new-python-library-for-exporting-formulas-to-excel-and-other-formats.html">New Python library for exporting formulas to Excel and other formats</a></li>
+    
+</ul>
+
+                    
+<h3>Tags</h3>
+<div class="separator"></div>
+<ul class="tag-cloud">
+    
+        <li><a href="tag-python.html ">Python</a></li>
+    
+        <li><a href="tag-design.html ">Design</a></li>
+    
+        <li><a href="tag-big-data.html ">Big Data</a></li>
+    
+        <li><a href="tag-performance.html ">Performance</a></li>
+    
+        <li><a href="tag-web-application.html ">Web application</a></li>
+    
+</ul>
+<div class="clear"></div>
+
+                    <h3>About</h3>
+<div class="separator"></div>
+<p>Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.<p>Generated using <a href="http://www.crinita.com/">Crinita</a> in version 0.1.1.</p></p>
+                </aside>
+                <div class="clear"></div>
+            </main>
+            <footer>
+                <p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />All the content is licensed under a <br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+            </footer>
+        </section>
+    </div>
+</body>
+</html>

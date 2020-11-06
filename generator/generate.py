@@ -20,7 +20,7 @@ for single_file in pkgutil.walk_packages(['.']):
 sites = cr.Sites(ENTITIES)
 # ========= CONFIGURATION =========
 # Path to outputs
-output_directory: Path = Path('../')
+output_directory: Path = Path('../docs/')
 # Resource directory
 resource_directory: Path = Path('RESOURCES')
 

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IT Blog | Optimizing database queries (not only) in Django ORM</title>
+    <meta name="description" content="Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.">
+    <meta name="keywords" content="Web application, Design, Performance, Programming, Python">
+    <meta name="author" content="David Salac">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <nav>
+            <a href="/" id="logo">
+                <span id="icon">&nbsp;</span>
+                IT Blog
+            </a>
+            
+<ul>
+    
+        <li>
+            <a href="/">HOME</a>
+        </li>
+    
+        <li>
+            <a href="about.html">About</a>
+        </li>
+    
+        <li>
+            <a href="contact.html">Contact</a>
+        </li>
+    
+        <li>
+            <a href="https://www.github.com/david-salac/">My GitHub</a>
+        </li>
+    
+</ul>
+
+        </nav>
+        <section>
+            <main>
+                <div id="page-content">
+                    
+<header>
+    <h1>Optimizing database queries (not only) in Django ORM</h1>
+    
+        <span class="date">★ Posted on November 06, 2020</span>
+    
+</header>
+<article>
+    
+        <div class="illustration" style="background-image: url('images/database_big.jpg')"></div>
+    
+    <div class="content">
+        One of the traditional arguments on why to avoid using ORM is the lack of performance. Although it is generally speaking correct, there are many ways how to write queries in your application. Some of them are better than others. There is almost always the way how to significantly increase the performance of application without avoiding the ORM approach.
+<h2>The general problem of selecting data</h2>
+<p>Many typical rules are worth to follow when querying a database. Typically you want to hit the database as less as you can. This means that it is meriting to write queries that fetch you all the data at once. So it is good to avoid many small queries. Another typical rule (that is not the opposite of the previous one) is to write queries that fetch you as much data as you need (and not any more). It means if you need data from one or two columns in the table, you should select precisely these columns and ignore others. All this goes hand by hand with the general rule, write the SQL queries in a way that affects as little tables as they can and is as simple as they can be. Following these rules can have a significant impact on application performance.</p>
+<h2>Selecting data in Django land</h2>
+<p>It is unquestionably true that the degree of freedom provided by default ORM tools is much lower than when you use raw queries. But that does not mean that it is not sufficient to almost all applications. Many useful tools in Django can help you with performance optimization. Following sections present some of them.</p>
+<h3>Classes F and Q</h3>
+<p>Classes F and Q are the tools of Django for optimizing selection conditions. You can import both classes from django.db.models module. The logic of Q is to abstract standard conditions. So you can effectively use conditions with all logical operators (negation, and, or). On the other hand, the F class allows you to write context-aware conditions.</p>
+<p>Say that we have some imaginary table storing information about people (day of registration, day of birth, the colour of hair). If we want to select some non-blond people  born before 1990 who registered themselves before 30th birthday, the query can look like:</p>
+<pre class="code"><code>from datetime import datetime, timedelta
+from django.db.models import Q, F
+
+selection = person.objects.filter(
+    Q(registered__lte=timedelta(30) + F('dob')),  # Registered before 30
+    ~Q(hair_color='blond')  # Non-blond
+    & Q(dob__lte=datetime(1990))  # born before 1990
+)</code></pre>
+<p>This example is an academical one. But it shows how useful these classes are. It can safe you a lot of database hits, compared to the naive approach when you check these conditions in a for a loop.</p>
+<h3>Selection of specific columns</h3>
+<p>The typical situation when selecting data is that you do not need all of them. Typically the application logic requires just a few columns out of many. Say, for example, that we have our table storing information about people enriched with the following columns: name, weight, shoe size, favourite colour, etc. If the only purpose of your selection is to have names of people matching specific conditions, then other columns are useless. What is worse, they make the whole operation of fetching data slower. There is, fortunately, a method in Django that can solve this problem. It is called values_list, and it is a method directly in the QuerySet class. After applying this method, our optimized query can look like:</p>
+<pre class="code"><code>only_names = selection.values_list('name', flat=True)</code></pre>
+<p>In this case, the list of values is fetched (flatten version, so it has just one dimension). If you instead need the dictionary (for example if you select multiple columns), there is a function called value, that works in the same way but returns dictionary instead of a list.</p>
+<h3>Application logic optimization</h3>
+<p>The two approaches above can make almost every query faster. But they are not sufficient if the logic of the application is incorrect. Unfortunately, there is no simple manual on how to design application logic in the best way. It is always dependant on your particular application. Broadly speaking, it is always necessary to design tables and selection logic in a way that follows all the principles mentioned above (fetch in one query all that is needed with interacting to the minimal number of tables).</p> 
+<p>There are, on the other hands, some commons mishaps. One of the popular is the repetitive selection of values from the database based on some conditions that are known in advance. In this case, the only correct approach is to fetch all the data in one query (instead of calling multiple queries).</p> 
+<p>To demonstrate such an inefficient example, consider our table storing information about people. Say, for example, that we want to have lists of all males and females in the system. The naive approach can look like:</p>
+<pre class="code"><code>males = [male.name for male in person.objects.filter(gender='male')]
+females = [female.name for female in person.objects.filter(gender='female')]</code></pre>
+<p>What is wrong with this example? You filter twice (and hit database twice) even though you know in advance what do you want to fetch. The optimized query (implementing the same) would look like:</p>
+<pre class="code"><code>males = []
+females = []
+for person in person.objects.all():
+    if person.gender == 'female':
+        females.append(person.name)
+    else:
+        males.append(person.name)</code></pre>
+<p>As you can see in this case, you hit the database just one when selecting all the rows (by the way, you should again reduce the column scope here as discussed above).</p>
+<h3>Tests of database models Django</h3>
+<p>Django provides many helpful tools for testing your application. One of the best tools is the class TransactionTestCase (in package django.test). It allows you to test models in a very efficient way. More than that, it contains a method called assertNumQueries. The method allows you to test a number of queries that are executed in your test case. This method is particularly helpful for optimizing application performance.</p>
+
+<h2>Summary</h2>
+<p>There are many ways how to optimize the performance of your application. One of them is to find the optimal way of accessing data in the database. Django ORM offers many vital tools that can help you to achieve this goal. Among the most important are classes F and Q that can allow you to apply smart filters for your queries. Another essential function is QuerySet.values(COLUMNS) that can allow you to select just the right number of columns in a query. There are also very helpful tools for testing of models in Django contained in class TransactionTestCase, among others function assertNumQueries that check the number of database hits in the test case. In the end, there are some general rules for how to make an application faster (not dependant on Django).</p>
+
+        
+            <span class="tag-cloud">❋ Tags:
+                <a href="tag-web-application.html">Web application</a>
+                <a href="tag-design.html">Design</a>
+                <a href="tag-performance.html">Performance</a>
+                <a href="tag-programming.html">Programming</a>
+                <a href="tag-python.html">Python</a>
+                
+            </span>
+        
+    </div>
+</article>
+                </div>
+
+                <aside>
+                    
+<h3>Recent posts</h3>
+<div class="separator"></div>
+<ul>
+    
+        <li><a href="optimizing-database-queries-not-only-in-django-orm.html">Optimizing database queries (not only) in Django ORM</a></li>
+    
+        <li><a href="suitable-ways-how-to-generate-complex-static-websites-using-python-language.html">Suitable ways how to generate complex static websites using Python language</a></li>
+    
+        <li><a href="how-to-replace-gdal-with-more-efficient-tools.html">How to replace GDAL with more efficient tools?</a></li>
+    
+        <li><a href="dimension-order-problem-when-storing-of-the-big-data.html">Dimension order problem when storing of the big data</a></li>
+    
+        <li><a href="new-python-library-for-exporting-formulas-to-excel-and-other-formats.html">New Python library for exporting formulas to Excel and other formats</a></li>
+    
+</ul>
+
+                    
+<h3>Tags</h3>
+<div class="separator"></div>
+<ul class="tag-cloud">
+    
+        <li><a href="tag-python.html ">Python</a></li>
+    
+        <li><a href="tag-design.html ">Design</a></li>
+    
+        <li><a href="tag-big-data.html ">Big Data</a></li>
+    
+        <li><a href="tag-performance.html ">Performance</a></li>
+    
+        <li><a href="tag-web-application.html ">Web application</a></li>
+    
+</ul>
+<div class="clear"></div>
+
+                    <h3>About</h3>
+<div class="separator"></div>
+<p>Professional blog about interesting issues in software and data engineering, data science and other similar topics related to IT created by David Salac.<p>Generated using <a href="http://www.crinita.com/">Crinita</a> in version 0.1.1.</p></p>
+                </aside>
+                <div class="clear"></div>
+            </main>
+            <footer>
+                <p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />All the content is licensed under a <br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+            </footer>
+        </section>
+    </div>
+</body>
+</html>
