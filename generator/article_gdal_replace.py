@@ -97,5 +97,6 @@ ENTITY = cr.Article(
           cr.Tag('Geospatial', 'geospatial'),
           cr.Tag('NetCDF', 'netcdf')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Python library GDAL for processing of geospatial data has become a synonym of obsoleteness and inefficiency. There are fortunately better tools to replace it."  # noqa: E501
 )
