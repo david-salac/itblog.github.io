@@ -57,5 +57,6 @@ ENTITY = cr.Article(
           cr.Tag('Geospatial', 'geospatial'),
           cr.Tag('NetCDF', 'netcdf')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Presents general rules for selecting the optimal order of dimension when storing big multidimensional data. The correct dimension order makes reading faster."  # noqa: E501
 )
