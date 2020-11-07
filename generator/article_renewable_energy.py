@@ -67,5 +67,6 @@ ENTITY = cr.Article(
           cr.Tag('Big Data', 'big-data'),
           cr.Tag('Geospatial', 'geospatial')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Renewable energy sources become more efficient and mainly more available. It also becomes crucial to understand how to predict the energy which we describe."  # noqa
 )

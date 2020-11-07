@@ -35,5 +35,6 @@ ENTITY = cr.Article(
           cr.Tag('Design', 'design'),
           cr.Tag('Crinita', 'crinita')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Generators of static pages present a suitable way for the effective creation of secure and compact websites. Crinita is highly efficient Python generator."  # noqa: E501
 )

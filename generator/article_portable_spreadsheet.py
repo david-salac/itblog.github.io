@@ -99,5 +99,6 @@ ENTITY = cr.Article(
           cr.Tag('Design', 'design'),
           cr.Tag('Excel', 'excel')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Portable Spreadsheet is the Python library encapsulating all the arithmetical operation needed to creates descriptive spreadsheets exportable to Excel or JSON."  # noqa: E501
 )

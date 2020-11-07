@@ -75,5 +75,6 @@ ENTITY = cr.Article(
           cr.Tag('Performance', 'performance'),
           cr.Tag('Essentials', 'essentials')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Virtual environments in Python are the fundamental concept that makes developing of application much easier and cleaner. There is a simple way of managing it."
 )
