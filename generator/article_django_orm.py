@@ -59,5 +59,6 @@ ENTITY = cr.Article(
           cr.Tag('Programming', 'programming'),
           cr.Tag('Python', 'python')],
     content=content,
-    lead=lead
+    lead=lead,
+    description="Technical analysis presenting ways for effective querying of the database using Django ORM like reducing the number of selected columns or using F or Q class."  # noqa: E501
 )
