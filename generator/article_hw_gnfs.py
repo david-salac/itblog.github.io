@@ -62,7 +62,7 @@ cloud computing&#8221;, Information Sciences, doi: 10.1016/j.ins.2016.10.017.</p
 
 ENTITY = cr.Article(
     title="The acceleration of public–key cryptanalysis methods using Xilinx Zynq-7000",
-    url_alias='the-acceleration-of-public–key-cryptanalysis-methods-using-xilinx-zynq-7000',
+    url_alias='the-acceleration-of-public-key-cryptanalysis-methods-using-xilinx-zynq-7000',
     large_image_path="images/hardware_big.jpg",
     small_image_path="images/hardware_small.jpg",
     date=datetime.datetime(2018, 11, 5),

@@ -26,6 +26,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/helpful-commands-for-linux-terminal-with-a-quick-introduction-to-unix-shell.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/prediction-of-renewable-energy-from-the-software-engineering-perspective.html</loc>
   </url>
 
@@ -58,7 +62,7 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/the-acceleration-of-public–key-cryptanalysis-methods-using-xilinx-zynq-7000.html</loc>
+    <loc>https://itblog.uk/the-acceleration-of-public-key-cryptanalysis-methods-using-xilinx-zynq-7000.html</loc>
   </url>
 
   <url>
@@ -106,11 +110,11 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-security.html</loc>
+    <loc>https://itblog.uk/tag-programming.html</loc>
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-programming.html</loc>
+    <loc>https://itblog.uk/tag-security.html</loc>
   </url>
 
   <url>
@@ -123,6 +127,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-data-visualisation.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-essentials.html</loc>
   </url>
 
   <url>
@@ -190,11 +198,19 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-virtual-environment.html</loc>
+    <loc>https://itblog.uk/tag-linux.html</loc>
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-essentials.html</loc>
+    <loc>https://itblog.uk/tag-terminal.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-administration.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-virtual-environment.html</loc>
   </url>
 
   <url>
