@@ -1,4 +1,4 @@
-# Dimension order problem when storing of the big data
+# Optimizing database queries (not only) in Django ORM
 import datetime
 import crinita as cr
 
@@ -52,7 +52,7 @@ ENTITY = cr.Article(
     url_alias='optimizing-database-queries-not-only-in-django-orm',
     large_image_path="images/database_big.jpg",
     small_image_path="images/database_small.jpg",
-    date=datetime.datetime(2020, 11, 6),
+    date=datetime.datetime(2020, 12, 6),
     tags=[cr.Tag('Web application', 'web-application'),
           cr.Tag('Design', 'design'),
           cr.Tag('Performance', 'performance'),
