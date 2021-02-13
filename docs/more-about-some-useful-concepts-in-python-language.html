@@ -120,7 +120,7 @@ class Child(Parent_A, Parent_B):
 print(Child.some_field)
 # >>> A
 print(Child.__mro__)
-# >>> (<class 'Child'>, <class 'Parent_A'>, <class 'Parent_B'>, <class 'object'>)</code></pre>
+# >>> (&lt;class 'Child'>, &lt;class 'Parent_A'>, &lt;class 'Parent_B'>, &lt;class 'object'>)</code></pre>
 
 <p>As you can see in <code>__mro__</code> field, there is the ordered list of instances of how they are called when accessing some field (the first one is always the class itself, then its parents from left, then it goes up in the hierarchy).</p>
 
