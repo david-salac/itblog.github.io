@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
+    <loc>https://itblog.uk/a-bit-more-about-cache-and-the-way-how-to-implement-it-in-python.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/more-about-some-useful-concepts-in-python-language.html</loc>
   </url>
 
@@ -102,6 +106,14 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-performance-page-1.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-programming.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-big-data.html</loc>
   </url>
 
@@ -110,19 +122,15 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-programming.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-geospatial.html</loc>
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-security.html</loc>
+    <loc>https://itblog.uk/tag-essentials.html</loc>
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-essentials.html</loc>
+    <loc>https://itblog.uk/tag-security.html</loc>
   </url>
 
   <url>
