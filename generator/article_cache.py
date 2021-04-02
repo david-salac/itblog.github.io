@@ -2,7 +2,7 @@
 import datetime
 import crinita as cr
 
-lead = """Cache represents a way how you can make your algorithm (whatever it is) work faster. Basically, it stores some outputs of your algorithm for some specific inputs (based on its policy) and when you ask your algorithm for something, it first checks if that information is stored in a memory (cache) so it can return it without performing any computations. If this logic succeeds (information is in memory) it is called a cache hit. On the other hand, if the information is not in memory, it is called a cache miss."""
+lead = """Cache represents a way how you can make your algorithm (whatever it is) work faster. Basically, it stores some outputs of your algorithm for some specific inputs (based on its policy) and when you ask your algorithm for something, it first checks if that information is stored in a memory (cache) so it can return it without performing any computations. If this logic succeeds (information is in memory) it is called a cache hit."""
 
 content = """Cache represents a way how you can make your algorithm (whatever it is) work faster. Basically, it stores some outputs of your algorithm for some specific inputs (based on its policy) and when you ask your algorithm for something, it first checks if that information is stored in a memory (cache) so it can return it without performing any computations. If this logic succeeds (information is in memory) it is called a cache hit. On the other hand, if the information is not in memory, it is called a cache miss.
 <p>

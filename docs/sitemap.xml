@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
+    <loc>https://itblog.uk/software-engineering-perspective-of-the-system-for-renewable-energy-prediction.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/a-bit-more-about-cache-and-the-way-how-to-implement-it-in-python.html</loc>
   </url>
 
@@ -110,15 +114,15 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-web-application.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-programming.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-big-data.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-web-application.html</loc>
   </url>
 
   <url>
@@ -143,6 +147,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-data-visualisation.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-renewable-energy.html</loc>
   </url>
 
   <url>
@@ -199,10 +207,6 @@
 
   <url>
     <loc>https://itblog.uk/tag-profiling.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-renewable-energy.html</loc>
   </url>
 
   <url>
