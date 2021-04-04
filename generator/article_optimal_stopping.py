@@ -66,8 +66,8 @@ The optimal stopping is one of the most important topics in pure (theoretic) mat
 """
 
 ENTITY = cr.Article(
-    title="Optimal stopping: a pure mathematics in real life",
-    url_alias='optimal-stopping-a-pure-mathematics-in-real-life',
+    title="Optimal stopping: a pure mathematics in real life",  # noqa: E501
+    url_alias='optimal-stopping-a-pure-mathematics-in-real-life',  # noqa: E501
     large_image_path="images/opt_stop_big.jpg",
     small_image_path="images/opt_stop_small.jpg",
     date=datetime.datetime(2021, 1, 17),
@@ -78,6 +78,5 @@ ENTITY = cr.Article(
           cr.Tag('Essentials', 'essentials')],
     content=content,
     lead=lead,
-    description="The article discusses a very interesting problem called optimal stopping. It demonstrates the most common use-cases. The most common case is searching for a new employee."
-    # noqa: E501
+    description="The article discusses a very interesting problem called optimal stopping. It demonstrates the most common use-cases. The most common case is searching for a new employee."  # noqa: E501
 )
