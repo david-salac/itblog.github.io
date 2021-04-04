@@ -55,12 +55,12 @@ The optimal stopping is one of the most important topics in pure (theoretic) mat
 <h3>Bomb Squad dilemma (aka burglar dilemma)</h3>
 <p>Suppose that we have the following problem: a burglar knows that the probability that someone catches him is about 20 per cent. How many houses can he pick to have a probability of being caught below 50 per cent?</p>
 <p>As you can see in this problem, you know all that is needed. The only thing is how many places can a burglar visit? The solution is the maximal <em>n</em> in the equation:</p>
-<p>(1 + 0.2)<sup><em>n</em></sup> < 0.5</p>
-<p>In other words, if the probability that someone catches burglar is <em>p</em> (our 20 per cent) and the desired probability of not being cached is <em>q</em> (our 50 per cent), the equation has the form:</p>
-<p>(1 + <em>p</em>)<sup><em>n</em></sup> < <em>q</em></p>
+<p>(1 - 0.2)<sup><em>n</em></sup> > 0.5</p>
+<p>In other words, if the probability that someone catches burglar is <em>p</em> (our 20 per cent) and the desired probability of being cached is <em>q</em> (our 50 per cent), the equation has the form:</p>
+<p>(1 - <em>p</em>)<sup><em>n</em></sup> > <em>q</em></p>
 <p>To solve this issue you can use a simple logarithm (or just try all options). The solution has the form:</p>
-<p><em>n</em> = floor(log(<em>q</em> / (1 + <em>p</em>)))</p>
-<p>Where the floor function is the lowest whole part of the number (rounding down). For our case it gives <em>n</em>&nbsp;=&nbsp;8.</p>
+<p><em>n</em> = floor(log(<em>q</em>) / log(1 - <em>p</em>)))</p>
+<p>Where the floor function is the lowest whole part of the number (rounding down). For our case it gives <em>n</em>&nbsp;=&nbsp;3.</p>
 <h2>Summary</h2>
 <p>This article discusses a very interesting problem called optimal stopping. It demonstrates the most common use-cases. The most common case is searching for a new employee (aka secretary problem or 37 per cent rule), then there is some generalisation presented (for example searching for a flat). Another class of problems is also discussed - the major difference for this case is that we have a norm (we can measure how good something is in an absolute way, not just by comparison to another entity). Another interesting problem related to optimal stopping is known as a burglar dilemma (or Bomb Squad dilemma). It is about the number of secure attempts in some risky activity that can be performed.</p>
 """
