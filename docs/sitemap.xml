@@ -14,6 +14,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/optimal-stopping-a-pure-mathematics-in-real-life.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/optimizing-database-queries-not-only-in-django-orm.html</loc>
   </url>
 
@@ -94,19 +98,19 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-python.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-python-page-1.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-design.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-design-page-1.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-python.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-python-page-1.html</loc>
   </url>
 
   <url>
@@ -122,11 +126,11 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-geospatial.html</loc>
+    <loc>https://itblog.uk/tag-programming.html</loc>
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-programming.html</loc>
+    <loc>https://itblog.uk/tag-geospatial.html</loc>
   </url>
 
   <url>
@@ -187,6 +191,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-hardware.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-mathematics.html</loc>
   </url>
 
   <url>
