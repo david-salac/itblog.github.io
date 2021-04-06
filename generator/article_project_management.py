@@ -32,6 +32,12 @@ content = """You cannot avoid it whenever you decide to manage some project in I
 
 <h2>Available tools</h2>
 <p>It is probably not a big surprise that there are already available tools that can make your project management work much simpler. The most popular one is called JIRA (developed by Atlassian). It is good to mention that even though JIRA represents a gold standard in software development, it is also a not very user-friendly piece of software. Therefore it is worth considering alternatives for project management (the author will not give you any hints as there are too many things available).</p>
+
+<figure>
+    <img src="images/jira_board.gif" alt="Figure 1: Example of JIRA board">
+    <figcaption>Figure 1: Some concrete example of JIRA board</figcaption>
+</figure>
+
 <p>Generally, be sure that you do not duplicate your work - for example by describing your tasks in some presentation. You will need to do your work twice (once on your slides, and then in JIRA). Just copying task for one sprint can take up to half of your day - so try to be effective. </p>
 <p>By the way, for managing some very small (open-source) project, there is also one simple free alternative. It is using GitHub project management tools. It is available as a tab when you open your project detail (you must be the admin of that particular project to have this feature available).</p>
 """
