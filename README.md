@@ -27,7 +27,7 @@ To install requirements:
 pip install -r requirements.txt
 ```
 
-The whole content (HTML files + resource) are located in folder
+The whole content (HTML files + resource) is located in the following folder:
 ```
 /docs/
 ```
