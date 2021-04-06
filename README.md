@@ -1,9 +1,9 @@
 # GitHub hosting for IT Blog
 Author: David Salac <https://www.github.com/david-salac>
 
-This is the hosting repo for websites <http://www.itblog.uk>
+This is the hosting repo for websites <https://itblog.uk>
 
-Sites are generated using Crinita system.
+Sites are generated using Crinita static web-site generator.
 
 ## How to change content
 In the `generator` folder, there are two types of files: `page_` and
@@ -27,8 +27,9 @@ To install requirements:
 pip install -r requirements.txt
 ```
 
-HTML files are located in the folder
+The whole content (HTML files + resource) are located in folder
 ```
-/
+/docs/
 ```
-they have to be in the root folder (because of GitHub configuration).
+they have to be either in root folder or `/docs` one
+(because of GitHub configuration for static web-sites hosting).
