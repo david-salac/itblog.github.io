@@ -11,8 +11,8 @@ content = """One of the common challenges in data processing is to provide quick
 <pre class="code"><code>import pandas as pd
 df = pd.DataFrame(data=NUMPY_ARRAY, 
                   columns=[col1, col2, ...], 
-                  index=[row1,row2,...])
-</code></pre>
+                  index=[row1,row2,...])</code></pre>
+                  
 <p>
 where NUMPY_ARRAY is a 2D array in NumPy (or just in plain Python), columns argument defines columns descriptor, and index argument defines row descriptors. For storing of multidimensional data (more than 2D), there is a simple construct in Pandas called MultiIndex. Consider following (simple) example:
 </p>

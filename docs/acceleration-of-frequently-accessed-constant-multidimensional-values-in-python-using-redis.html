@@ -60,8 +60,10 @@
 <h2>Using of Pandas' DataFrame</h2>
 <p>DataFrames in Pandas library represents a suitable way how to store 2D structures in Python. There is a simple way how to index data using column and row indices. Pandas library is also deeply related to NumPy library and data from DataFrame can be easily converted to NumPy and vice versa. The simplest 2D DataFrame can be created in the following logic:</p>
 <pre class="code"><code>import pandas as pd
-df = pd.DataFrame(data=NUMPY_ARRAY, columns=[col1, col2, ...], index=[row1,row2,...])
-</code></pre>
+df = pd.DataFrame(data=NUMPY_ARRAY, 
+                  columns=[col1, col2, ...], 
+                  index=[row1,row2,...])</code></pre>
+                  
 <p>
 where NUMPY_ARRAY is a 2D array in NumPy (or just in plain Python), columns argument defines columns descriptor, and index argument defines row descriptors. For storing of multidimensional data (more than 2D), there is a simple construct in Pandas called MultiIndex. Consider following (simple) example:
 </p>
