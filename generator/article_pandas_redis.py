@@ -14,7 +14,11 @@ df = pd.DataFrame(data=NUMPY_ARRAY, columns=[col1, col2, ...], index=[row1,row2,
 <p>
 where NUMPY_ARRAY is a 2D array in NumPy (or just in plain Python), columns argument defines columns descriptor, and index argument defines row descriptors. For storing of multidimensional data (more than 2D), there is a simple construct in Pandas called MultiIndex. Consider following (simple) example:
 </p>
-<pre class="code"><code>df = pd.DataFrame(data=NUMPY_ARRAY, columns=[col1, col2, ...], index=[[row1,row2,...], [idx1, idx2,...]])
+<pre class="code"><code>df = pd.DataFrame(
+    data=NUMPY_ARRAY, 
+    columns=[col1, col2, ...], 
+    index=[[row1,row2,...], [idx1, idx2,...]]
+)
 </code></pre>
 <p>
 Data here are accessible using column key and set of 2-row keys (which is technically 3D). In this way, it is possible to use as many dimensions as required. The more sophisticated way how to index data is to use MultiIndex class directly, which offers a lot of possibilities.
@@ -32,16 +36,17 @@ A typical way where to store the serialized object is on the local drive. The di
 import pandas as pd
 # ... code
 # Connect to redis:
-connector = redis.StrictRedis(host="?", port=?, password="?")
+connector = redis.StrictRedis(host="?", 
+                              port=?, 
+                              password="?")
 connector.set("key-in-redis", dataframe.to_msgpack())
 </code></pre>
 <p>
 For reading the data use following logic:</p>
-<pre style="box-sizing: border-box; padding: 15px; background: #f4f4f4"><code>import redis
+<pre class="code"><code>import redis
 import pandas as pd
 # After connecting to the REDIS (described above):
-data_frame = connector.get("key-in-redis")
-</code></pre>
+data_frame = connector.get("key-in-redis")</code></pre>
 <p>
 These examples illustrate the simplest way of how to store data in REDIS and access them. It is possible to use every other method in REDIS as well to work with the binary stream from MSG.
 </p>
