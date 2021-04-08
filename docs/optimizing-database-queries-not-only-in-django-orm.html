@@ -68,7 +68,8 @@
 from django.db.models import Q, F
 
 selection = person.objects.filter(
-    Q(registered__lte=timedelta(30) + F('dob')),  # Registered before 30
+    # Registered when younger than 30
+    Q(registered__lte=timedelta(30) + F('dob')),  
     ~Q(hair_color='blond')  # Non-blond
     & Q(dob__lte=datetime(1990))  # born before 1990
 )</code></pre>
@@ -81,8 +82,10 @@ selection = person.objects.filter(
 <p>The two approaches above can make almost every query faster. But they are not sufficient if the logic of the application is incorrect. Unfortunately, there is no simple manual on how to design application logic in the best way. It is always dependant on your particular application. Broadly speaking, it is always necessary to design tables and selection logic in a way that follows all the principles mentioned above (fetch in one query all that is needed with interacting to the minimal number of tables).</p> 
 <p>There are, on the other hands, some commons mishaps. One of the popular is the repetitive selection of values from the database based on some conditions that are known in advance. In this case, the only correct approach is to fetch all the data in one query (instead of calling multiple queries).</p> 
 <p>To demonstrate such an inefficient example, consider our table storing information about people. Say, for example, that we want to have lists of all males and females in the system. The naive approach can look like:</p>
-<pre class="code"><code>males = [male.name for male in person.objects.filter(gender='male')]
-females = [female.name for female in person.objects.filter(gender='female')]</code></pre>
+<pre class="code"><code>males = [male.name for male in 
+    person.objects.filter(gender='male')]
+females = [female.name for female in 
+    person.objects.filter(gender='female')]</code></pre>
 <p>What is wrong with this example? You filter twice (and hit database twice) even though you know in advance what do you want to fetch. The optimized query (implementing the same) would look like:</p>
 <pre class="code"><code>males = []
 females = []
