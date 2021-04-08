@@ -1,5 +1,6 @@
 from pathlib import Path
 import shutil
+import datetime
 from typing import List, Union
 import pkgutil
 from os import listdir
@@ -49,6 +50,7 @@ cr.Config.robots_txt = """User-agent: *
 Allow: /
 Sitemap: https://itblog.uk/sitemap.xml"""
 cr.Config.footer = '<p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="images/creative_commons.png"></a><br>All the content is licensed under a <br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>'
+cr.Config.resources_path = resource_directory
 # =================================
 
 # Remove existing content
@@ -70,5 +72,7 @@ if output_directory.exists():
 # Generate sites
 sites.generate_pages(output_directory)
 
-# Add resources
-shutil.copytree(resource_directory, output_directory, dirs_exist_ok=True)
+# Back-up sites
+sites.archive(
+    Path(f"../backup/backup_{datetime.datetime.now().strftime('%Y-%m-%d')}")
+)
