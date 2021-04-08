@@ -55,7 +55,9 @@ workbook.close()
 # Create the spreadsheet with the correct labels
 sheet = ps.Sheet.create_new_sheet(
     6, 1,
-    rows_labels=['Food', 'Drink', 'Headphones', 'Total', 'Minimal', 'Grocery'],
+    rows_labels=['Food', 'Drink', 
+                 'Headphones', 'Total', 
+                 'Minimal', 'Grocery'],
     columns_labels=['Revenue']
 )
 # Set the values (in the Pandas-like way)
@@ -63,9 +65,9 @@ sheet.loc['Food', 'Revenue'] = 15000
 sheet.loc['Drink', 'Revenue'] = 16000
 sheet.loc['Headphones', 'Revenue'] = 1000
 # Set the computations
-sheet.loc['Total', 'Revenue'] = \
+sheet.loc['Total', 'Revenue'] = \\ 
     sheet.loc['Food':'Total', 'Revenue'].sum()
-sheet.loc['Minimal', 'Revenue'] = \ 
+sheet.loc['Minimal', 'Revenue'] = \\ 
     sheet.loc['Food':'Total', 'Revenue'].min()
 sheet.loc['Grocery', 'Revenue'] = (
         sheet.loc['Food', 'Revenue'] + 
