@@ -105,8 +105,8 @@ This example uses only the dependencies of rasterstats (so it does not require t
 
 <pre class="code"><code>import netCDF4
 ds = netCDF4.Dataset(wdp_path, 'r')
-# Read variable:
-variable_content = ds['VAR_NAME'][:]  # Return numpy masked array
+# Read variable (returns numpy masked array):
+variable_content = ds['VAR_NAME'][:] 
 # Read global attribute
 atr_content = ds.ATTRIBUTE_NAME
 # Read variable attribute
