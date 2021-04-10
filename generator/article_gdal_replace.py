@@ -79,7 +79,11 @@ else:
     cells_in_intersection = cell_def[intersection]
 </code></pre>
 
-<p>Another helpful tool for dealing with shapefiles is a library called fiona (https://pypi.org/project/Fiona/). It covers all the functionality needed for generating of shapefiles.</p>
+<p>Another helpful tool for dealing with shapefiles is a library called fiona (discussed below). It covers all the functionality needed for generating of shapefiles.</p>
+
+<h2>What is not yet available outside GDAL?</h2>
+<p>There are a few applications of GDAL where there is no other sufficient product available. One of the very common application is geospatial coordinates transformation (for example, from EPSG:4326 to EPSG:3856). There are some ways how to circumvent this issue using the underpinning library of QGIS - but this treatment is maybe worse than a disease (as installing QGIS is in many ways more difficult than installing GDAL). For these specific purposes, GDAL is a very helpful tool. Also, it is good to be aware that many libraries mentioned above use GDAL internally (it is just intelligently wrapped so you can use install a library in a user-friendly way).</p> 
+<p>Another library that is worth mentioning is Fiona - even though it uses GDAL internally it can be easily installed using PIP. It is particularly helpful for the creation of custom shapefiles and processing of shapefiles generally. Fiona is performance-optimized (working faster than library GeoPandas which can also be used in some limited way for this purposes).</p>
 
 <h2>Summary</h2>
 <p>This article tends to present some of the most common use cases for dealing with geospatial data and tools for dealing with these cases (that are quickly accessible and easy to use and install). All these tools can help to replace GDAL in most applications. All these tools are library in Python simply installable via PIP - namely: rasterstats, rasterio, shapely, fiona, netCDF4, geopandas, xarray. It is definitely worth to spend some time to study these tools.</p>
