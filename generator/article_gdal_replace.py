@@ -86,7 +86,7 @@ else:
 <p>Another library that is worth mentioning is Fiona - even though it uses GDAL internally it can be easily installed using PIP. It is particularly helpful for the creation of custom shapefiles and processing of shapefiles generally. Fiona is performance-optimized (working faster than library GeoPandas which can also be used in some limited way for this purposes).</p>
 
 <h2>Summary</h2>
-<p>This article tends to present some of the most common use cases for dealing with geospatial data and tools for dealing with these cases (that are quickly accessible and easy to use and install). All these tools can help to replace GDAL in most applications. All these tools are library in Python simply installable via PIP - namely: rasterstats, rasterio, shapely, fiona, netCDF4, geopandas, xarray. It is definitely worth to spend some time to study these tools.</p>
+<p>This article tends to present some of the most common use cases for dealing with geospatial data and tools for dealing with these cases (that are quickly accessible and easy to use and install). All these tools can help to replace GDAL in most applications. All these tools are library in Python simply installable via PIP - namely: rasterstats, rasterio, shapely, Fiona, netCDF4, geopandas, xarray. It is worth spending some time studying these tools. Although it is good to be aware that many of these tools use GDAL internally (but in a way that makes installation easier). </p>
 """
 
 ENTITY = cr.Article(
