@@ -2,9 +2,9 @@
 import datetime
 import crinita as cr
 
-lead = """This article is focused on the design and implementation details of the system for the prediction of renewable energy. I am talking here about the web application (not about the desktop app). Some helpful information from the project management perspective is also mentioned (including costs of the project). This article can be helpful for you to decide if you want to choose this path and to save your time."""
+lead = """This article is focused on the design and implementation details of the system for the prediction of renewable energy. I am talking here about the web application (not about the desktop app). Some helpful information from the project management perspective is also mentioned (including costs of the project). This article can be helpful for you to decide if you want to choose this path and to save your time. """
 
-content = """This article is focused on the design and implementation details of the system for the prediction of renewable energy. I am talking here about the web application (not about the desktop app). Some helpful information from the project management perspective is also mentioned (including costs of the project). This article can be helpful for you to decide if you want to choose this path and to save your time.
+content = """This article is focused on the design and implementation details of the system for the prediction of renewable energy. I am talking here about the web application (not about the desktop app). Some helpful information from the project management perspective is also mentioned (including costs of the project). This article can be helpful for you to decide if you want to choose this path and to save your time. 
 
 <h2>What is the best programming language?</h2> 
 <p>In theory, there are multiple good options. Strictly speaking, the main languages that are worth considering are Python, Go, C++ and Java. It probably does not make any sense to start any new project in Java, so let's exclude it (shame on you, Oracle).</p> 
