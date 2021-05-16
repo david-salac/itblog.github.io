@@ -72,8 +72,10 @@ def some_static_method(arg1, arg2): ...</code></pre>
 <h3>Conversion from dict to class (and) object (using <code>collections.namedtuple</code>)</h3>
 <p>A named tuple is a very helpful tool. It basically creates a (sub)class with required fields. It is helpful if you want to have a general type besides the object. Consider the following example (we suppose that dictionary to be converted is variable <code>some_dict</code>):</p>
 
-<pre class="code"><code># Create a type that contains fields equals to keys of the dictionary
-SuperType = collections.namedtuple("SomeType", some_dict.keys())
+<pre class="code"><code># Create a type that contains fields equals to keys of dict
+SuperType = collections.namedtuple(
+    "SomeType", some_dict.keys()
+)
 # Create concrete object
 obj_from_dict = SuperType(**some_dict)
 # Now you can access fields:
@@ -120,7 +122,8 @@ class Child(Parent_A, Parent_B):
 print(Child.some_field)
 # >>> A
 print(Child.__mro__)
-# >>> (&lt;class 'Child'>, &lt;class 'Parent_A'>, &lt;class 'Parent_B'>, &lt;class 'object'>)</code></pre>
+# >>> (&lt;class 'Child'>, &lt;class 'Parent_A'>, 
+       &lt;class 'Parent_B'>, &lt;class 'object'>)</code></pre>
 
 <p>As you can see in <code>__mro__</code> field, there is the ordered list of instances of how they are called when accessing some field (the first one is always the class itself, then its parents from left, then it goes up in the hierarchy).</p>
 
@@ -138,10 +141,13 @@ print(Child.__mro__)
         # Create new method "number_of_elements"
         inst.number_of_elements = len(dct)
         # Filter members starting with "some_"
-        all_members = [mt for mt in inst.__dict__ if mt.startswith("some_")]
-        # Replace members starting with "some_" by some method
+        all_members = [mt for mt in inst.__dict__ 
+                       if mt.startswith("some_")]
+        # Replace members starting with "some_" by a method
         for member in all_members:
-            setattr(inst, member, lambda *args: print("OVERLOAD"))
+            setattr(inst, member,
+                    # Some method (lambda) 
+                    lambda *args: print("OVERLOAD"))
         # Return instance
         return inst
 
