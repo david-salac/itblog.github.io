@@ -113,7 +113,7 @@ an_inst.other_method()
 
 <h3>Important methods/variables in a class:</h3>
 <ul>
-<li><code>__call__</code>: invokes (<code>__new__</code> and <code>__init__</code>). Important when metaclasses operate as software design patterns providers.</li>
+<li><code>__call__</code>: invokes (<code>__new__</code> and <code>__init__</code>). Important when metaclasses operate as software design patterns providers (this method allows you to operate with the instance as if it was a function).</li>
 <li><code>__new__</code>: this method is called in the first place when the new instance of a class is created. An essential method for metaclasses when you want to edit class behaviour (typically based on some condition).</li>
 <li><code>__dict__</code>: a dictionary that contains attributes, methods, properties and all other members as keys (keys are the string with name) and its implementation (or definition) as value. Can be helpful for the selection and modification of some class behaviour.</li>
 <li><code>setattr</code>: a method for setting attributes on some object</li>

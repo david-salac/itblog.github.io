@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
+    <loc>https://itblog.uk/practical-aspects-of-asynchronous-programming-in-python.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/software-engineering-perspective-of-the-system-for-renewable-energy-prediction.html</loc>
   </url>
 
@@ -138,15 +142,19 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-programming-page-1.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-essentials.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-web-application.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-geospatial.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-essentials.html</loc>
   </url>
 
   <url>

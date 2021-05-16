@@ -4,6 +4,7 @@ import datetime
 from typing import List, Union
 import pkgutil
 from os import listdir
+from urllib import parse
 
 import crinita as cr
 
@@ -14,7 +15,15 @@ for single_file in pkgutil.walk_packages(['.']):
         if single_file.name == 'generate':
             continue
         pack = __import__(single_file.name)
+        # Check if the URL does not contains anything wrong
+        checked_url = pack.ENTITY.url_alias
+        if parse.quote(checked_url) != checked_url.lower():
+            raise ValueError("URL contains prohibited characters {}".format(
+                checked_url
+            ))
         ENTITIES.append(pack.ENTITY)
+    except ValueError as e:
+        raise e
     except:  # noqa
         continue
 
