@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
+    <loc>https://itblog.uk/most-common-use-cases-for-nosql-databases.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/practical-aspects-of-asynchronous-programming-in-python.html</loc>
   </url>
 
@@ -150,6 +154,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-essentials-page-1.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-web-application.html</loc>
   </url>
 
@@ -215,6 +223,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-hardware.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-nosql.html</loc>
   </url>
 
   <url>
