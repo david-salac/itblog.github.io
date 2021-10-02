@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
+    <loc>https://itblog.uk/two-universes-in-the-big-data-environment.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/most-common-use-cases-for-nosql-databases.html</loc>
   </url>
 
@@ -227,6 +231,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-nosql.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-database.html</loc>
   </url>
 
   <url>
