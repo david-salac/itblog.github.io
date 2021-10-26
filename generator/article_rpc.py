@@ -390,8 +390,8 @@ if __name__ == '__main__':
 """
 
 ENTITY = cr.Article(
-    title="Technical possibilities in datasets binary serialization and RPC",
-    url_alias='technical-possibilities-in-datasets-binary-serialization-and-rpc',
+    title="Technical possibilities in binary serialization and RPC",
+    url_alias='technical-possibilities-in-binary-serialization-and-rpc',
     large_image_path="images/protocol_big.jpg",
     small_image_path="images/protocol_small.jpg",
     date=datetime.datetime(2021, 10, 24),
