@@ -1,0 +1,407 @@
+# More about some useful concepts in Python language
+import datetime
+import crinita as cr
+
+lead = """One of the common challenges when dealing with data is how to send the dataset from one place to another and how to store data effectively. These problems are interconnected, as they both require serialization of data (sometimes called data encoding). Generally, the most effective data serialization method is to transform (or rather keep) data structures in binary form (opposite to text formats like JSON or XML). As usual, there are many established ways and standards for dealing with this issue."""
+
+content = """One of the common challenges when dealing with data is how to send the dataset from one place to another and how to store data effectively. These problems are interconnected, as they both require serialization of data (sometimes called data encoding). Generally, the most effective data serialization method is to transform (or rather keep) data structures in binary form (opposite to text formats like JSON or XML). As usual, there are many established ways and standards for dealing with this issue.
+
+<h2>What are serialization and deserialization?</h2>
+<p>Serialization (aka encoding) is when an object in your code is transformed to a format suitable for saving to storage or transfer over a network. The object here can be everything (class instance, any variable, class/type definition itself, etc.). The opposite process is called deserialization (aka decoding). Generally, there are two ways of how to serialize data: binary and text.</p> 
+
+<p>Serialization into a text format means that data are transformed into a human-readable sequence of characters. The most common (and standardized) way for serializing data is CSV, XML and JSON. Mainly JSON provides a popular choice - as data sets are relatively small and processable in JavaScript (particularly in the world of REST services). Many tools are available for transforming data from one text format into another (or a different form of the same). Popular Unix tools (like grep, awk) can help you process data in a text format. The main disadvantages of this format are the size of the output and slow (plus often unprecise) serialization and deserialization.</p>
+
+<p>On the other hand, binary serialization is fast and effective (if it comes to output size). Generally, the concrete binary representation of the object is just transformed into a series of bytes. Consider, for example, IEE-754 double-precision float - the size based on the standard is 64 bites (8 bytes) - this is always true; it does not matter what number you choose. But if you serialize the same number to text, it can be just one byte, but also (depending on precision) 16 bytes or more.</p>
+
+<h2>Remote Procedure Call (RPC) and RPC frameworks</h2>
+<p>The issue that is closely related to binary data serialization is RPC. Technically, there are three main ways to get data from a remote source: REST, RPC, and message passing. REST (combined with JSON) is a standard in web development - it uses text serialization, all transfer data can usually be easily decoded and modified, same holds for requests. However, as mentioned above, this is not optimal when data transfers matter, and mainly where minimal latency is essential. For these purposes, there are RPC frameworks.</p>
+
+<p>Syntax of RPC request in programming language usually really resembles calling of function. However, in the background, all input parameters are serialized (usually in a binary format) and transferred over the network (and also, the response is serialized in binary form and transferred back). The usual use cases for RPC frameworks are communication between services (microservices), interaction with embedded devices (like sensors) or similar dedicated applications. Unfortunately, most RPC frameworks are not fully supported in browsers, so they cannot replace REST.</p>
+
+<h2>Technical possibilities</h2>
+<p>As described above, RPC and binary serialization are intertwined problems. However, sometimes frameworks are more inclined to prefer one thing to another (like gRPC). Each technology that follows is widely used for these purposes (and follow good practices - meaning that it is free and open-source).</p>
+
+<h3>gRPC framework</h3>
+<p>Google developed this technology in 2016, and it has quickly become prevalent. As a result, practically all popular programming languages support this protocol (like C#, C++, Java, Python, Go). The framework uses so-called Protocol Buffers to define communication protocol. Protocol Buffers are an essential description of the interface - what each procedure accepts and returns, data types including arrays (this concept is called interface definition language). A special script then generates files for the programming language - technically, these files present a static library defining RPC procedures (as functions). Both client and server use these (library) files - although differently.</p>
+
+<p>To demonstrate how our gRPC works, let's have a simple example. Suppose we want to list all items in a shopping trolley and return some overall statistics (like the total price and number of things). But as a first thing, we need to install gRPC - this example uses Python programming language, you can install gRPC using PIP (as <code>pip install grpcio grpcio-tools</code>).</p>
+
+<p>Protocol Buffer file (with name <code>trolley.proto</code>) for our example can have the following syntax:</p>
+
+<pre class="code"><code>syntax = "proto3";
+
+message Item {
+  string name = 1;
+  double unit_price = 2;
+  int32 count = 3;
+}
+
+message TrolleyContent {
+  repeated Item content = 1;
+  int32 total_count = 2;
+  double total_price = 3;
+}
+
+message User {
+  string name = 1;
+  string UUID = 2;
+}
+
+service Trolley {
+  rpc GetContent(User) returns (TrolleyContent) {}
+}
+</code></pre>
+
+<p>To generate static (libraries) files, run the command:</p>
+
+<pre class="code"><code>python -m grpc_tools.protoc --proto_path=. trolley.proto --python_out=. --grpc_python_out=.</code></pre>
+
+<p>As you can see, the script generates two files (libraries):</p> 
+
+<pre class="code"><code>trolley_pb2.py
+trolley_pb2_grpc.py</code></pre>
+
+<p>These are two files that are used as an interface in your Python application. However, there is already one problem, the relative import at the beginning of the trolley_pb2_grpc script:</p>
+
+<pre class="code"><code>import trolley_pb2 as trolley__pb2</code></pre>
+
+<p>You have to manually replace this line with the correct path inside your project. It is inconvenient that the script for a generation does not set up the relative or absolute project path. However, that is the reality you can easily circumvent.</p>
+
+<p>If we continue with our example, we need to write a server that handles requests. As mentioned above, we want to use Python everywhere (for both client and server) - but you can find many tutorials for other programming languages. Unfortunately, there is no complex service framework for RPC like Django (that works for REST), so you need to write things from a low level. The following example shows a simple server:</p>
+
+<pre class="code"><code>import traceback
+from concurrent import futures
+import logging
+
+import grpc
+
+import trolley_pb2 as trolley_pb2
+import trolley_pb2_grpc as trolley_pb2_grpc
+
+
+LOGGER = logging.getLogger("gRPC server")
+logging.basicConfig(level=logging.DEBUG)
+
+
+# ===================================================
+#               MAIN SERVER CLASS
+# ===================================================
+class Trolley(trolley_pb2_grpc.TrolleyServicer):
+    \"""
+    Server class for serving gRPC Trolley service requests
+    \"""
+
+    def GetContent(self, request, context):
+        try:
+            # 1. Do some validation of inputs
+            valid_uuids = SELECT_FROM_DB
+            if request.UUID not in valid_uuids:
+                # Prepare error message (if relevant)
+                context.set_details('user is not registered')
+                context.set_code(
+                    # Select appropriate response code
+                    grpc.StatusCode.INVALID_ARGUMENT
+                )
+            # 2. Prepare response
+            response = trolley_pb2.TrolleyContent(
+                total_count=3,
+                total_price=57.5,
+                content=[
+                    # List of gRPC messages
+                    trolley_pb2.Item(name="Blue car",
+                                     unit_price=3.50,
+                                     count=6),
+                    trolley_pb2.Item(name="Red car",
+                                     unit_price=12.0,
+                                     count=2),
+                    trolley_pb2.Item(name="Grey car",
+                                     unit_price=12.5,
+                                     count=1),
+                ]
+            )
+            # Send response
+            return response
+        # To capture all errors (& prevent failure):
+        except BaseException as error:  # noqa
+            context.set_details("system error")
+            context.set_code(grpc.StatusCode.INTERNAL)
+            # Internally log error
+            LOGGER.critical(
+                f"internal error when processing {request}"
+            )
+            logging.critical(error)
+            logging.error(traceback.format_exc())
+
+        # Send response (with error definition)
+        return trolley_pb2.TrolleyContent()
+
+
+# ===================================================
+#                 SPIN-UP SERVER
+# ===================================================
+def serve():
+    \"""Main application loop\"""
+    server = grpc.server(
+        futures.ThreadPoolExecutor(max_workers=4)
+    )
+    trolley_pb2_grpc.add_TrolleyServicer_to_server(
+        Trolley(), server
+    )
+    server.add_insecure_port(f'[::]:{GRPC_PORT}')
+    server.start()
+    server.wait_for_termination()
+
+
+if __name__ == '__main__':
+    # Start server
+    LOGGER.info("starting server")
+    serve()</code></pre>
+
+<p>As you can see, the most important part of the server is the extension of TrolleyServicer. Servicer classes are related to a particular service (interface), and the logic of the server is implemented in their extension. The class that inherits from Servicer has to override all methods (RPC procedures). It is also essential to add some standard error handling (and understand return codes). The function <code>serve</code> is the server main loop - instantiates server on a particular address and port.</p> 
+
+<p>Now, let's move to the client-side. Consider the following example that sends a request and print incoming results. It also contains some fundamental error handling on the client side.</p>
+
+<pre class="code"><code>import grpc
+import trolley_pb2_grpc
+import trolley_pb2
+
+
+# Open gRPC channel
+with grpc.insecure_channel(
+    # Address of gRPC server
+    f'localhost:{GRPC_PORT}'
+) as channel:
+    # Create gRPC Stub
+    stub = trolley_pb2_grpc.TrolleyStub(channel)
+    # Get content
+    content = stub.GetContent(
+        trolley_pb2.User(name="John",
+                         UUID=EXISTING_UUID)
+    )
+    # Process response:
+    print(f"Count: {content.total_count} \n"
+          f"Price: {content.total_price}")
+    for item in content.content:
+        print(f"Name: {item.name} \n"
+              f"Unit price: {item.unit_price} \n"
+              f"Count: {item.count}")
+
+    # Now let's handle error request
+    try:
+        content = stub.GetContent(
+            trolley_pb2.User(name="Peter",
+                             UUID=WRONG_UUID)
+        )
+    except grpc.RpcError as e:
+        if e.code() == grpc.StatusCode.INVALID_ARGUMENT:
+            print("Special handling for the code")
+        print(f"error when processing request: {e.details()}")</code></pre>
+
+<p>The most important entity is called stub (the client-side equivalent of a servicer). First, the client has to instantiate stubs with the channel directly (it is a parameter of the constructor). Then the request for a particular stub can be sent.</p>
+
+<p>The important thing is that when you instantiate stub, no connection is immediately created. That is done later when the concrete procedure is called. Another thing that is good to bear in mind is the retry policy - there is no default retry policy configured. You have to do this manually (read the documentation to see more). It is important to do so.</p>
+
+<p>Working with gRPC is often challenging. For example, the automatic reboot of a server (when anything changes) is not supported. This is inconvenient because you need to restart the server manually when anything changes. Also, many helpful tools like Postman are not available. There is, however, a command-line equivalent of curl (called grpcurl) - that can help a lot when debugging.</p>
+
+<p>There are manuals on how to use gRPC to serialize data directly to a disk. However, the logic of gRPC proto buffers is the same. Thus, as the name suggests, gRPC is mainly the RPC framework. It is primarily used for communication between (micro)services.</p>
+
+<h3>Apache Thrift</h3>
+
+<p>Facebook developed Thrift in 2008; it became an open-source project in 2010 (known as Apache Thrift). It is a quite popular framework - technically, it is the equivalent of gRPC. It is up to every developer team to choose what is their preferable RPC framework.</p>
+
+<p>Thrift's interface definition language and protocol are also called Apache Thrift (technically equivalent gRPC and protocol buffer). Thrift allows using additional configuration options (like nonbinary communication), making it a bit more complex in some ways than gRPC. But generally, what is true about gRPC is also true about Thrift.</p>
+
+<p>Regarding the example described above, the interface definition would look like this (file <code>trolley.thrift</code>):</p>
+
+<pre class="code"><code>struct Item {
+  1: string name,
+  2: double unit_price,
+  3: i32 count
+}
+
+struct TrolleyContent {
+  1: list<Item> content,
+  2: i32 total_count,
+  3: double total_price
+}
+
+struct User {
+  1: string name,
+  2: string UUID
+}
+
+service Trolley {
+  TrolleyContent GetContent(1: User user)
+}</code></pre>
+
+<p>You can immediately see many similarities with the protocol buffer file. However, this structure is slightly more complex (including possibilities to return arrays in services).</p>
+
+<p>To generate library files, use the command:</p>
+
+<pre class="code"><code>thrift -r --gen py trolley.thrift</code></pre>
+
+<p>If we continue with our example, the code on the server-side will look like this:</p>
+
+<pre class="code"><code>import logging
+import sys
+# Add path to generated script
+sys.path.append('gen-py')
+
+from trolley import Trolley
+from trolley.ttypes import Item, TrolleyContent, User
+
+from thrift.transport import TSocket
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
+from thrift.server import TServer
+from thrift.Thrift import TException
+
+LOGGER = logging.getLogger(__file__)
+
+
+# ============================================
+#              MAIN SERVER CLASS
+# ============================================
+class TrolleyHandler:
+    \"""
+    Server class for serving Thrift Trolley service requests
+    \"""
+
+    def GetContent(self, user: User) -> TrolleyContent:
+        # 1. Do some validation of inputs
+        valid_uuids = SELECT_FROM_DB
+        if user.UUID not in valid_uuids:
+            # Prepare error message (if relevant)
+            raise TException("Wrong UUID")
+
+        # 2. Prepare response
+        response = TrolleyContent(
+            total_count=3,
+            total_price=57.5,
+            content=[
+                # List of Thrift messages
+                Item(name="Blue car",
+                     unit_price=3.50,
+                     count=6),
+                Item(name="Red car",
+                     unit_price=12.0,
+                     count=2),
+                Item(name="Grey car",
+                     unit_price=12.5,
+                     count=1),
+            ]
+        )
+
+        # Send response
+        return response
+
+
+# ============================================
+#              SPIN-UP SERVER
+# ============================================
+def serve():
+    handler = TrolleyHandler()
+    processor = Trolley.Processor(handler)
+    transport = TSocket.TServerSocket(host=THRIFT_HOST,
+                                      port=THRIFT_PORT)
+    tfactory = TTransport.TBufferedTransportFactory()
+    pfactory = TBinaryProtocol.TBinaryProtocolFactory()
+
+    server = TServer.TSimpleServer(
+        processor, transport, tfactory, pfactory
+    )
+
+    # You could do one of these for a multithreaded server
+    # server = TServer.TThreadedServer(
+    #     processor, transport, tfactory, pfactory)
+    # server = TServer.TThreadPoolServer(
+    #     processor, transport, tfactory, pfactory)
+
+    server.serve()
+
+
+if __name__ == '__main__':
+    # Start server
+    LOGGER.info('Starting the server')
+    serve()
+    LOGGER.info('done')</code></pre>
+
+<p>Again, even here, the resemblance to gRPC is considerable. The main server-class overrides all implemented methods (services) defined in the Thrift file. Handling of data types is more natural (types behaves like actual classes). Handling error is more straightforward - you can raise something inherited from TException and catch it on the client.</p>
+
+<p>Client example:</p>
+
+<pre class="code"><code>import sys
+sys.path.append('gen-py')
+
+from trolley import Trolley
+from trolley.ttypes import Item, TrolleyContent, User
+
+from thrift.Thrift import TException
+from thrift.transport import TSocket
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
+
+
+def main():
+    # Make socket
+    transport = TSocket.TSocket(THRIFT_HOST, THRIFT_PORT)
+    # Buffering is critical. Raw sockets are very slow
+    transport = TTransport.TBufferedTransport(transport)
+    # Wrap in a protocol
+    protocol = TBinaryProtocol.TBinaryProtocol(transport)
+    # Create a client to use the protocol encoder
+    client = Trolley.Client(protocol)
+    # Connect!
+    transport.open()
+
+    # Call request (with context)
+    user = User(name="Some real user",
+                UUID=EXISTING_UUID)
+    trolley_content: TrolleyContent = client.GetContent(user)
+    # Process response
+    print(f"Count: {trolley_content.total_count} \n"
+          f"Price: {trolley_content.total_price}")
+    for item in trolley_content.content:
+        print(f"Name: {item.name}"
+              f"Unit price: {item.unit_price}",
+              f"Count: {item.count}")
+    # Error handling:
+    try:
+        user = User(name="Some nonexisting user",
+                    UUID=WRONG_UUID)
+        client.GetContent(user)
+    except TException as e:
+        print(e)
+
+    # Close!
+    transport.close()
+
+
+if __name__ == '__main__':
+    # Call client
+    main()</code></pre>
+
+<p>Client code is again very similar to gRPC client; creating connection is more complex (3 lines more), but the rest is almost the same. In addition, error handling is more straightforward.</p>
+
+<p>Similarly, as gRPC, Apache Thrift can be used for serialization of data to disk. As is mentioned above, you can easily find ready-made examples of how to do it. However, the principle is the same (you still need to define data structure in Thrift's Interface Definition Language).</p> 
+
+<h2>Summary</h2>
+<p>One of the common challenges when storing or sending data on the network is effectively serializing them (converting them into technically suitable representation). Binary serialization is one of the essential parts of effective Remote Procedure Call (RPC) frameworks. The most popular RPC frameworks are gRPC and Apache Thrift. The principle of interface definition language is to describe interface (what data and types are transferred) - gRPC uses protocol buffers, Apache Thrift uses IDL with the same name (Thrift file). There are, of course, many other technologies - like Apache Avro, designed for specific purposes (and extended to support RPC).</p>
+"""
+
+ENTITY = cr.Article(
+    title="Technical possibilities in datasets binary serialization and RPC",
+    url_alias='technical-possibilities-in-datasets-binary-serialization-and-rpc',
+    large_image_path="images/protocol_big.jpg",
+    small_image_path="images/protocol_small.jpg",
+    date=datetime.datetime(2021, 10, 24),
+    tags=[cr.Tag('Python', 'python'),
+          cr.Tag('Design', 'design'),
+          cr.Tag('Programming', 'programming'),
+          cr.Tag('Performance', 'performance'),
+          cr.Tag('Essentials', 'essentials')],
+    content=content,
+    lead=lead,
+    description="Remote Procedure Call (RPC) frameworks are the fundamental programming concept. The crucial part of RPC is the binary serialization of data usable also when writing on a disk."  # noqa: E501
+)
+
