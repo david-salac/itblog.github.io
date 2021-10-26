@@ -179,11 +179,11 @@ with grpc.insecure_channel(
                          UUID=EXISTING_UUID)
     )
     # Process response:
-    print(f"Count: {content.total_count} \n"
+    print(f"Count: {content.total_count} \\n"
           f"Price: {content.total_price}")
     for item in content.content:
-        print(f"Name: {item.name} \n"
-              f"Unit price: {item.unit_price} \n"
+        print(f"Name: {item.name} \\n"
+              f"Unit price: {item.unit_price} \\n"
               f"Count: {item.count}")
 
     # Now let's handle error request
@@ -359,7 +359,7 @@ def main():
                 UUID=EXISTING_UUID)
     trolley_content: TrolleyContent = client.GetContent(user)
     # Process response
-    print(f"Count: {trolley_content.total_count} \n"
+    print(f"Count: {trolley_content.total_count} \\n"
           f"Price: {trolley_content.total_price}")
     for item in trolley_content.content:
         print(f"Name: {item.name}"
