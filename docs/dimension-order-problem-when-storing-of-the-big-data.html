@@ -70,11 +70,11 @@
 
 <h2>How are data stored technically?</h2>
 <p>As mentioned above, data are technically stored in just one dimension. This raises the question of how it is possible to store multidimensional data to just one dimension and reconstruct them? The answer is simpler than one might think. Suppose you have just three dimensions of sizes (<em>l</em><sub>1</sub>, <em>l</em><sub>2</sub>, <em>l</em><sub>3</sub>). Then each point <em>P</em> has coordinates (<em>p</em><sub>1</sub>, <em>p</em><sub>2</sub>, <em>p</em><sub>3</sub>) - always indexed from 0 to <em>l</em><sub>i</sub> (right excluded). You can easily map these three coordinates to just one coordinate, say <em>q</em>, by using the relation:</p>
-<p style="text-align: center">
+<p class="center">
     <em>q</em> = <em>p</em><sub>1</sub> + <em>l</em><sub>1</sub> &#8901; <em>p</em><sub>2</sub> + <em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub> &#8901; <em>p</em><sub>3</sub>
 </p>
 <p>draw a cube and try it practically if you do not believe it. And a similar relation is usable for the inverse mapping (from one dimension to three dimensions):</p>
-<p style="text-align: center">
+<p class="center">
     <em>p</em><sub>3</sub> = FLOOR(<em>q</em> / (<em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub>))<br>
     <em>p</em><sub>2</sub> = FLOOR((<em>q</em> - <em>p</em><sub>3</sub> &#8901; <em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub>) / <em>l</em><sub>1</sub>)<br>
     <em>p</em><sub>1</sub> = <em>q</em> - <em>p</em><sub>3</sub> &#8901; <em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub> - <em>p</em><sub>2</sub> &#8901; <em>l</em><sub>1</sub>
