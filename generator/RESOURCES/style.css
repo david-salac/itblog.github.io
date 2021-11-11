@@ -285,6 +285,16 @@ figure img {
     text-align: center;
 }
 
+table.std_table {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+table.std_table th, table.std_table td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+
 @media only screen and (max-width: 1000px) {
   nav {
     position: relative;
