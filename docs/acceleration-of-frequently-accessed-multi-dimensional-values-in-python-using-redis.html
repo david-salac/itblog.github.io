@@ -125,7 +125,7 @@ The first column in this table represents the number of entities in a DataFrame 
 </figure>
 
 <p>
-There is no significant delay in the overall process up to one million entities. On selected technology, this is also an edge for the optimal size of the stored tables. Furthermore, it means that a user experience is not affected by the long time needed for receiving values below this value.
+In the figure above, you can see that the time dependency is almost perfectly linear. Also, there is no significant delay up to one million entities (meaning the dealy more than one second). One million entities (table cells) are also an edge value for the optimal size of the stored table (regarding both the price for storing and the performance). Furthermore, it means that a user experience is not affected by the long time needed for receiving values below the edge value. Of course, this value is deeply dependent on the hardware (system) you use; therefore, it is essential to measure each specific hardware's threshold. Also, one second can be too long for particular applications (the acceptable latency should always be defined in requirements). It is also worth to notice, that measurement does not include any delay (latency) caused by network connection (which should not be omitted in practical cases).
 </p>
 
 <h2>Other ways for binary data serialization</h2>
