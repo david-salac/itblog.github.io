@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
+    <loc>https://itblog.uk/practical-aspects-of-requirements-engineering.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/technical-possibilities-in-binary-serialization-and-rpc.html</loc>
   </url>
 
@@ -154,6 +158,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-performance-page-2.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-programming.html</loc>
   </url>
 
@@ -199,6 +207,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-administration.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-project-management.html</loc>
   </url>
 
   <url>
@@ -275,10 +287,6 @@
 
   <url>
     <loc>https://itblog.uk/tag-profiling.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-project-management.html</loc>
   </url>
 
   <url>
