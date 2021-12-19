@@ -114,7 +114,9 @@ time_series = pd.DatetimeIndex(
 <h3>Chunking</h3>
 <p>Consider that you need to read variables in reasonable-sized chunks when working on a machine with limited resources (an extremely common problem when dealing with satellite images). There are generally two ways how to treat this issue. The more complex one is to read (or write) from (to) variable using Dask (or xarray running on Dask). This approach is helpful if you process massive datasets and know what to expect inside each variable (knowing format and sizes in advance) and is suitable only for experienced professionals. Another approach is to read the variable in slices. In these cases, xarray is useless because you absolutely cannot really on it. Consider the following example:</p>
 
-<pre class="code"><code>value = file['var'].sel(lon=0, lat=0, time=slice(100, 1100)).values</code></pre>
+<pre class="code"><code>value = file['var'].sel(
+    lon=0, lat=0, time=slice(100, 1100)
+).values</code></pre>
 
 <p>You would expect that memory usage cannot exceed the value of memory usage for that 1000 items that you actually read. Unfortunately, the reality is that xarray reads the whole variable into memory and then slices it afterwards. That is unacceptable (as it can easily cause a crash). Equivalent code that uses native driver works correctly:</p>
 
