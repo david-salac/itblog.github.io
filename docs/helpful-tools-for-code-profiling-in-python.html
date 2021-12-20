@@ -55,7 +55,7 @@
         <div class="illustration" style="background-image: url('images/profiling_big.jpg')"></div>
     
     <div class="content">
-        Code profiling is one of the most important parts of the code optimisation process. Generally speaking, it is the program analysis where we are mainly interested in memory usage and time complexity of the program (or each of its part). We can also be interested in how often we use some function (or how often we call it, what's the duration). There are a lot of principles and tools to perform these tasks. This article is mainly focused on stack tracing, line-by-line code analysis tools, and function call graphs.
+        Code profiling is one of the most important parts of the code optimisation process. Generally speaking, it is the program analysis where we are mainly interested in memory usage and time complexity of the program (or each of its parts). We can also be interested in how often we use some function (or how often we call it, what is the latency). There are a lot of principles and tools to perform these tasks. This article is mainly focused on stack tracing, line-by-line code analysis tools, and function call graphs.
 
 <h2>Stack trace (aka stack backtrace or backtrace) sampling</h2>
 <p>Stack trace sampling represents one of the fundamental principles of program profiling. The basic principle is that the algorithm sample program's stack (stack trace) in some reasonable frequency. In the end, we can analyse the running time of each block and its memory usage.</p>
@@ -83,51 +83,54 @@ def a(input):
     return out
 </code>
 </pre>
-<p>Simplified stack of the program (that calls the function 'a') would follow the logic:</p>
+<p>A simplified stack of the program (that calls the function 'a') would follow the logic:</p>
 <pre class="code"><code>[() <- beginning of the code]
 [(a) <- function 'a' is called]
 [(a, b) <- function 'a' call the function 'b']
 [(a, b, c) <- function 'b' call the function 'c']
 [(a, b) <- function 'c' returns the result to 'b']
 [(a) <- function 'b' returns the result to 'a']
-[() <- function 'a' returns a result]
-</code></pre>
-<p>This stack is simplified because there is also a lot of other operations (arithmetic operators, print statements, loops etc.), but it captures the main purpose of the stack.</p>
+[() <- function 'a' returns a result]</code></pre>
+<p>This stack is simplified because there are also many other sub-operations (arithmetic operators, print statements, loops, etc.), but it captures the main purpose of the stack.</p>
 
 <h3>Visualisation of the stack trace sampling (for running time)</h3>
-<p>If we are interested in the performance optimisation, we need to see the time consumption of each block. The figure typically looks like this:</p>
+<p>If we are interested in performance optimisation, we need to see the time consumption of each block. The figure typically looks like this:</p>
 
 <figure>
     <img src="images/profile_abc.png" alt="Figure 1: Logic of stack-trace">
     <figcaption>Figure 1: Logic of stack-trace</figcaption>
 </figure>
 
-<p>where there is a time on the horizontal axis and the stack depth on the vertical one (in this case going down).</p>
+<p>There is a time on the horizontal axis and the stack depth on the vertical one (in this case, going down) in this figure.</p>
 
 <h3>How to plot figures like this in Python (cProfile, snakeviz, vprof)</h3>
-<p>Python has a built-in profiler called cProfile. This profiler documents the running time of each block in the program (alas not the memory usage). It can be called directly using the command:</p>
+<p>Python has a built-in profiler called cProfile. This profiler documents the running time of each block in the program (alas, not the memory usage). It can be called directly using the command:</p>
 <code>python -m cProfile -o {OUTPUT}.dat {PROGRAM}.py</code>
-<p>where the {OUTPUT} should be replaced by the path to the output data file and the {PROGAM} is the script that is the subject of the profiling.</p>
-<p>There are many tools for visualisation of the outputs. Arguably the most popular one is called snakeviz. It can be installed using pip (pip install snakeviz). It is a web application that visualises the profiler output (received by cProfile) as an interactive graph. To call the SnakeViz, use simply the command:</p>
-<code>snakeviz {OUTPUT}.dat</code>
-<p>Output window of the SnakeViz looks like:</p>
+<p>where the <code>{OUTPUT}</code> should be replaced by the path to the output data file and the <code>{PROGAM}</code> is the script that is the subject of the profiling.</p>
+<p>There are many tools for the visualisation of the outputs. Arguably the most popular one is called snakeviz. It can be installed using pip (<code>pip install snakeviz</code>). It is a web application visualising the profiler output (received by cProfile) as an interactive graph. To call the SnakeViz, use simply the command:</p>
+
+<pre class="code"><code>snakeviz {OUTPUT}.dat</code></pre>
+
+<p>Output window of the SnakeViz looks like this:</p>
 
 <figure>
     <img src="images/snakeviz.png" alt="Figure 2: Snakeviz output">
     <figcaption>Figure 2: Snakeviz output</figcaption>
 </figure>
 
-<p>Another very popular tool that does the same is called vprof. It can be again simply installed using pip (pip install vprof) and called using logic:</p>
-<code>vprof -c cmh "{PROGRAM}.py"</code>
+<p>Another very popular tool that does the same is called vprof. It can be again installed using pip (pip install vprof) and called using logic:</p>
+
+<pre class="code"><code>vprof -c cmh "{PROGRAM}.py"</code></pre>
+
 <h3>What do we want to achieve?</h3>
-<p>Our main objective during the optimisation process is to shrink all the blocks as much as we possibly can.</p>
+<p>Our main objective during the optimisation process is to shrink all the blocks as much as possible. Optimally in both dimensions (not to have too many sub-procedures called, and have the shortest running time for each).</p>
 
 <h3>Memory stack trace sampling</h3>
-If it comes to memory profiling, there is currently no equivalent tool in Python for visualisation of the memory usage in the stack trace sampling logic. The only option is to use the line-by-line analysis. Closest to this is the package guppy3 presented bellow.
+<p>There is currently no equivalent tool in Python for visualisation of memory usage in the stack trace sampling logic when it comes to memory profiling. The only option is to use the line-by-line analysis. Closest to this is the package guppy3 presented below.</p>
 
 <h2>Line-by-line analysis</h2>
-<p>This type of analysis is a kind of cavemen approach. We basically measure the memory usage and the running time of each line in our code. In this case, one has to be aware of the impact that measuring itself has on the measured data (line-by-line analysis is susceptible). The output of memory profiling is typically just a table containing line number and matching value.</p>
-[Memory profiler output example]
+<p>This type of analysis is a kind of cavemen approach. We basically measure each line's memory usage and running time in our code. In this case, one must be aware of the impact that measuring itself has on the measured data (line-by-line analysis is susceptible). The output of memory profiling is typically just a table containing line numbers and matching values.</p>
+
 <pre class="code"><code>Line #    Mem usage    Increment   Line Contents
 ================================================
      5     14.3 MiB     14.3 MiB   @memory_profiler.profile
@@ -136,7 +139,8 @@ If it comes to memory profiling, there is currently no equivalent tool in Python
 </code></pre>
 
 <h3>Memory profiling in Python (package memory-profiler)</h3>
-<p>The output of line-by-line memory profiling is the vector that contains the value of used memory for each line of measured code. In Python, there is a library called memory-profiler that can be easily installed by pip (pip install memory-profiler). The simplest model is to profile concrete function using the decorator "profile":</p>
+<p>The output of line-by-line memory profiling is the vector that contains the value of used memory for each line of measured code. In Python, a library called memory-profiler can be easily installed by pip (<code>pip install memory-profiler</code>). The simplest model is to profile concrete function using the decorator "profile":</p>
+
 <pre class="code"><code>import memory_profiler
 
 from application import a
@@ -147,12 +151,12 @@ def profiled_fn():
 
 
 if __name__ == '__main__':
-    profiled_fn()
-</code></pre>
+    profiled_fn()</code></pre>
 
-<p>The output of this profiling is the table shown above.</p>
+<p>The output of this profiling is in the table shown above.</p>
 
 <p>Slightly more complex usage of the memory-profiler (usable for further processing) is to use the method "memory_usage":</p>
+
 <pre class="code"><code>import memory_profiler
 
 from application import a, b, c
@@ -165,16 +169,17 @@ def measured_function(arg):
 
 
 # Measure the memory usage
-mem_usage: list = memory_profiler.memory_usage((measured_function, (5, )))
-</code></pre>
-<p>This function returns an array that contains memory usage of each line (indexed from 0). Using the memory_usage function is incredibly helpful for analysing the code memory requirements for different inputs.</p>
-<p>It is good to know that there is some mandatory memory usage about 100 MB required by Python (this has to be considered as a constant). Memory usage accepts two parameters, one is the pointer to the function, and another one is the tuple of arguments.</p>
+mem_usage: list = memory_profiler.memory_usage((measured_function, (5, )))</code></pre>
+
+<p>This function returns an array containing each line's memory usage (indexed from 0). Using the memory_usage function is incredibly helpful for analysing the code memory requirements for different inputs.</p>
+<p>It is good to know that Python requires some mandatory memory usage of about 100 MB (this has to be considered a constant). Memory usage accepts two parameters, one is the pointer to the function, and another one is the tuple of arguments.</p>
 
 <h3>Visualisation of the line-by-line memory profiling in Python</h3>
-<p>After you receive the vector with values, you can use all standard approaches for plotting graphs in Python (like pyplot). Slightly more complex visualisation is available in the vprof (described above). If you choose to use vprof, you, unfortunately, cannot scale the problem by any argument (it just shows you the memory consumption line by line of script that you have called).</p>
+<p>After receiving the vector with values, you can use all standard approaches for plotting graphs in Python (like pyplot). Slightly more complex visualisation is available in the vprof (described above). If you choose to use vprof, you, unfortunately, cannot scale the problem by any argument (it just shows you the memory consumption line by line of script that you have called).</p>
 
 <h3>Package guppy3 for advanced memory profiling</h3>
-<p>Package guppy3 (installable via PIP: pip install guppy3) represents a slightly more sophisticated approach for analysing of the program memory usage. It shows a more in-depth analysis of the heap state, including data types of the objects there (unfortunately, only the basic type are reflected). You can as well use the complex API to access all measured values. To use guppy3 follow the logic:</p>
+<p>Package guppy3 (installable via PIP: <code>pip install guppy3</code>) represents a slightly more sophisticated approach for analysing the program memory usage. It shows a more in-depth analysis of the heap state, including the objects' data types (unfortunately, only the basic type are reflected). You can as well use the complex API to access all measured values. To use guppy3, follow the logic:</p>
+
 <pre class="code"><code>import guppy
 
 from application import a, b
@@ -190,9 +195,10 @@ point_1 = guppy.hpy()
 
 # Print the analysis
 print(point_0.heap())
-print(point_1.heap())
-</code></pre>
-where "<code>point_0 = hpy()</code>" creates you a point where the analysis of the heap is committed. For printing the analysis, you can call the function "<code>point_0.heap()</code>" on the object (or you can use deeper analysis tools described in the <a href="https://github.com/zhuyifei1999/guppy3">documentation on GitHub</a>). Typical output looks like:
+print(point_1.heap())</code></pre>
+
+<p>where <code>point_0 = hpy()</code> creates a point where the analysis of the heap is committed. For printing the analysis, you can call the function <code>point_0.heap()</code> on the object (or you can use deeper analysis tools described in the documentation on GitHub). Typical output looks like this:</p>
+
 <pre class="code"><code>Partition of a set of 39738 objects. Total size = 4574417 bytes.
  Index  Count   %     Size   % Cumulative  % Kind (class / dict of class)
      0  10694  27   976147  21    976147  21 str
@@ -206,10 +212,11 @@ where "<code>point_0 = hpy()</code>" creates you a point where the analysis of t
      8     99   0   183152   4   3789765  83 dict of module
      9    288   1    96256   2   3886021  85 set
 <115 more rows. Type e.g. '_.more' to view.></code></pre>
-As you can see, guppy3 covers everything available in memory_profile package plus offers slightly deeper inside.
+
+<p>As you can see, guppy3 covers everything available in the memory_profile package plus offers slightly deeper inside.</p>
 
 <h2>Function dynamic call graphs</h2>
-<p>A call graph (aka call multigraph) shows the flow of the application. Basically, it visualises what each function call based on a given input. It is an incredibly helpful tool for simplifying of the code (reducing the number of function calls). The typical flow looks like this:</p>
+<p>A call graph (aka call multigraph) shows the flow of the application. Basically, it visualises what each function call based on a given input. It is an incredibly helpful tool for simplifying the code (reducing the number of function calls). The typical flow looks like this:</p>
 
 <figure>
     <img src="images/call_graph.png" alt="Figure 3: Call-graph example">
@@ -217,28 +224,35 @@ As you can see, guppy3 covers everything available in memory_profile package plu
 </figure>
 
 <h3>Creating the call graph figure in Python</h3>
-<p>Although it seems to be a trivial task (which it surprisingly is not), there is currently no robust tools that can create a call graph. The closest to this goal is the package called pycallgraph2 (pip install pycallgraph2). To make it work it also requires system package called graphviz (on Debian installable via apt install graphviz).</p>
+<p>Although it seems to be a trivial task (which it surprisingly is not), there are no robust tools that can create a call graph. The package closest to this goal is pycallgraph2 (pip install pycallgraph2). However, to make it work, it also requires a system package called graphviz (on Debian installable via apt install graphviz).</p>
 
 <p>To create the graph, you need to commit:</p>
-<code>pycallgraph graphviz -- {PROGRAM}.py</code>
-<p>The script generates the PNG file (pycallgraph.png) that looks like the graph illustrated in the figure above. Another way how to use pycallgraph is to use it inside the source code. </p>
+
+<pre class="code"><code>pycallgraph graphviz -- {PROGRAM}.py</code></pre>
+
+<p>The script generates the PNG file (pycallgraph.png) that looks like the graph illustrated in the figure above. Another way to use pycallgraph is to use it inside the source code.</p>
+
 <pre class="code"><code>from pycallgraph2 import PyCallGraph
+
 from pycallgraph2.output import GraphvizOutput
 
 from application import a
 
 with PyCallGraph(output=GraphvizOutput()):
     # Code to profile:
-    a(9)
-</code></pre>
+    a(9)</code></pre>
 
-<p>Real problems are typically so complicated that generated figure is not easily readable (generated objects are massive). The script is also very susceptible and cannot handle many useful things (multithreading and multitasking, a lot of external libraries, etc.).</p>
+<p>Real problems are typically so complicated that generated figure is not easily readable (generated objects are massive). The script is also very susceptible and cannot handle many useful things (multithreading and multitasking, many external libraries, etc.).</p>
+
+<h2>Other types of profiling</h2>
+<p>So far, only a generic type of code profiling has been discussed. However, there might be other essential metrics depending on the application type. One of the common things for web application is to measure the number of database hits - meaning how many times does application access the database server for a specific request (or set of requests). This information is important because every request is delayed by latency when accessing the database server. Similar essential matric is the number of input and output operations on disk (or through the network) - for the same reason (each IO operation has its latency). This matric can be measured using presented tools (focusing on IO operation calls). There always is a trade-off between reading or writing more but less often versus the opposite.</p>
 
 <h2>Summary</h2>
-<p>There are many similar tools for code profiling. It is, however, always good to bear in mind that measuring itself changes a code behaviour (always true). This article summarises some essential tools available in Python for code profiling. For the performance (run time) profiling it is cProfile + snakeviz or vprof. For the profiling of memory usage, it is the package memory-profiler and guppy3. If it comes to the dynamic call graphs, it is mainly the package pycallgraph2. All presented packages are available through PIP (the pycallgraph2 also requires one system package). </p>
+<p>There are many similar tools for code profiling. It is, however, always good to bear in mind that measuring itself changes a code behaviour (always true). This article summarises some essential tools available in Python for code profiling. The performance (run time) profiling is cProfile + snakeviz or vprof. The profiling of memory usage is the package memory-profiler and guppy3. When it comes to the dynamic call graphs, it is mainly the package pycallgraph2. All presented packages are available through PIP (the pycallgraph2 also requires one system package).</p>
 
 <h2>Related GIT repo</h2>
 <p>All used source codes are available in the REPO: <a href="https://github.com/david-salac/python-memory-profiling">GIT repo</a></p>
+<p>See the <a href="https://github.com/zhuyifei1999/guppy3">guppy3 documentation on GitHub</a></p>
 
 
         
