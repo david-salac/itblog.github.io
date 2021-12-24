@@ -1,23 +1,23 @@
-# More about some useful concepts in Python language
+# A bit more about cache and the way how to implement it in Python
 import datetime
 import crinita as cr
 
-lead = """Cache represents a way how you can make your algorithm (whatever it is) work faster. Basically, it stores some outputs of your algorithm for some specific inputs (based on its policy) and when you ask your algorithm for something, it first checks if that information is stored in a memory (cache) so it can return it without performing any computations. If this logic succeeds (information is in memory) it is called a cache hit."""
+lead = """Cache represents a way how you can make your algorithm work faster. Basically, it is a memory that stores outputs of your algorithm for specific inputs - which outputs are cached depending on the policy. When you ask your algorithm for results, it first checks if it is stored in a cache (memory) to return without performing any computations. If this logic succeeds (information is in memory), the situation is called a cache hit. On the other hand, if the information is not in memory, it is called a cache miss."""
 
-content = """Cache represents a way how you can make your algorithm (whatever it is) work faster. Basically, it stores some outputs of your algorithm for some specific inputs (based on its policy) and when you ask your algorithm for something, it first checks if that information is stored in a memory (cache) so it can return it without performing any computations. If this logic succeeds (information is in memory) it is called a cache hit. On the other hand, if the information is not in memory, it is called a cache miss.
-<p>
-Naturally, you intend to have the highest cache hit ratio. The way how you can achieve it is determined by the size of memory that is dedicated to cache and cache replacement policy. There are other aspects in place as well (for example how fast cache memory is), but these theoretical aspects are typically something that you cannot change from the perspective of high-level programming.
-</p>
+content = """Cache represents a way how you can make your algorithm work faster. Basically, it is a memory that stores outputs of your algorithm for specific inputs - which outputs are cached depending on the policy. When you ask your algorithm for results, it first checks if it is stored in a cache (memory) to return without performing any computations. If this logic succeeds (information is in memory), the situation is called a cache hit. On the other hand, if the information is not in memory, it is called a cache miss.
+<p>Naturally, you intend to have the highest cache hit ratio - this is the ultimate goal. Usually, the memory size dedicated to the cache and replacement policy determines the level of success. Of course, many other aspects have an impact on performance (for example, how fast cache memory is) - but these practical factors are typically something that you cannot change from the perspective of high-level programming.</p>
+
 <h2>Cache replacement policies</h3>
-<p>Let's go a bit more to theory. There are many policies on how to cache your data (meaning what data you want to save in a particular context). The most important cache policies are LRU and MRU - there are many other policies, as you can find in this brilliant piece on <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies">Wikipedia (HERE)</a> (where I copied the following definitions).</p>
+<p>There are many policies on how to cache your data (meaning what data you want to save in a particular context). The most crucial cache policies are LRU and MRU - there also exist other policies. The correct replacement policy is essential and depends on a concrete algorithm. Consider an example of a fast algorithm except for a few values. Then it makes sense to cache these few values even if not computed very often - it can make the algorithm run continuously quickly. Whereas if you have a different algorithm where the computation is always slow, it makes sense to cache only values computed frequently. You can find many other examples and appropriate cache policies if you search.</p>
+<p>It is essential to notice that cache policy does not determine how to implement a cache. Instead, it always depends on a concrete situation - if you implement a cache for hardware, in some low-level programming language, or high-level one, and on what type of data is cached (is it possible to compute hash, etc.). Therefore cache policy is, technically speaking, a class defining some algorithmic problem.</p>
 <h3>Least recently used (LRU)</h3>
-<p>Discards the least recently used items first. This algorithm requires keeping track of what was used when - that is expensive if one wants to make sure the algorithm always discards the least recently used item. General implementations of this technique require keeping "age bits" for cache-lines and track the "Least Recently Used" cache-line based on age-bits. In such an implementation, every time a cache-line is used, the age of all other cache-lines changes. LRU is rather a family of caching algorithms.</p>
+<p>It is arguably the most common cache policy. This algorithm caches only values that have been used recently (and discards oldest values). Generally, most of the algorithms use values repeatedly in programming, so it makes sense to store a few newest values. As a result, this class of caches is prevalent on every level. For example, you can find LRU caches on many hardware components (like disk, on many units of CPU, GPU). In addition, almost every standard library in every popular language implements it somehow.</p>
 <h3>Most recently used (MRU)</h3>
-<p>Discards, in contrast to LRU, the most recently used items first. For example, when a file is being repeatedly scanned in a (Looping Sequential) reference pattern, MRU is the best replacement algorithm. Also for random access patterns and repeated scans over large datasets (sometimes known as cyclic access patterns) MRU cache algorithms have more hits than LRU due to their tendency to retain older data. MRU algorithms are most useful in situations where the older an item is, the more likely it is to be accessed.</p> 
+<p>Works in the exact opposite direction than LRU. It caches the oldest values and discards the newest ones. MRU caching class is not that widespread. However, there are some good examples when it makes sense - imagine that you deal with something that occurs periodically (or almost periodically) -  it makes sense to cache the oldest value because it will occur earlier than the newest value. You can imagine the example of busses arriving at the station and the algorithm providing details related to bus number. This algorithm will likely need to access older values as the probability that the same number occurs twice in a sequence is low.</p> 
 <h2>Practical usage of cache in Python language</h2>
-<p>The good news is that there is a simple way how you can impose cache on some function in Python. But before we dive into this issue, let's briefly introduce decorators in Python.</p>
+<p>The good news is that there is a simple way to use cache on some functions in Python. But before diving into this issue, it is vital to introduce decorators in Python.</p>
 <h3>Decorator of function/method in Python</h3>
-<p>Decorators are a helpful construct in Python. They allow you to modify the behaviour of some function or method (in Python 3.x also class). User-defined decorators are typically helpful for logging functionality or doing some pre/after-commit work.</p> 
+<p>Decorators are a helpful construct in Python. They allow you to modify the behaviour of some function or method (and also classes). User-defined decorators are typically beneficial for logging functionality or doing some pre/after-commit work.</p> 
 <p>Consider the following example (of the most complex) decorator:</p>
 <pre class="code"><code>def decorator_factory(argument):
     print(f"decorator_factory called with: {argument}")
@@ -51,10 +51,10 @@ some_function(6, 7)
 # >>> wrapper start
 # >>> some_function (7, 9)
 # >>> wrapper end</code></pre>
-<p>This example is the most complex decorator you can create. It has its arguments, and you can as well modify the function behaviour (and its arguments).</p> 
+<p>This example is the most complex decorator you can create. It has its parameters, and you can also modify the function behaviour (and its arguments).</p> 
 <p>As you probably already know, there are many build-in decorators in Python, as well as many decorators created in Python's libraries.</p>
 <h3>Decorator <code>lru_cache</code> in <code>functools</code> package</h3>
-<p>Decorator for function <code>lru_cache</code> in <code>functools</code> package (this package is a system package, so you do not have to install anything) is the easy-to-use implementation of LRU cache. The decorator itself takes a few parameters. The most important one is maxsize that defines the size of the cache. It also provides some additional functionality that can be called on function (as to object) to see some statistics (<code>cache_info</code>) or to clean cache(<code>cache_clear</code>). The following example demonstrates everything you need to know:</p>
+<p>Decorator for function <code>lru_cache</code> in the <code>functools</code> package (this package is a system package, so you do not have to install anything) is the easy-to-use implementation of LRU cache. The decorator itself takes a few parameters. The most important one is <code>maxsize</code> that defines the size of the cache. It also provides some additional functionality that can be called on function (as to object) to see some statistics (<code>cache_info</code>) or to clean cache(<code>cache_clear</code>). The following example demonstrates everything you need to know:</p>
 <pre class="code"><code>import functools
 import random  # To test if cache works
 
@@ -76,7 +76,7 @@ some_function.cache_clear()
 print(some_function.cache_info())
 # >>> CacheInfo(hits=0, misses=0, maxsize=128, currsize=0)
 print(some_function(4))  # A totally new output</code></pre>
-<p>The important note is: you can use <code>lru_cache</code> from <code>functools</code> only to stand-alone functions and the static method of a class. Never to standard class methods. The reason why you cannot use <code>functools</code>' <code>lru_cache</code> decorator for a standard method is that it is related to the whole class and not to an instance. This can cause memory leaks and unexpected behaviour. Consider the following example:</p>
+<p>The important note is: you can use <code>lru_cache</code> from <code>functools</code> only to stand-alone functions and the static method of a class. Never to standard class methods. It is not possible to use <code>functools</code> <code>lru_cache</code> decorator for a standard method because it is related to the whole class and not to an instance. This can cause memory leaks and unexpected behaviour. Consider the following example:</p>
 <pre class="code"><code>import functools
 import random
 
@@ -92,7 +92,8 @@ print(obj_b.some_method(4))
 print(obj_b.some_method.cache_info())
 # >>> CacheInfo(hits=0, misses=2, maxsize=3, currsize=2)
 # => See a problem here: currsize=2 instead of 1 !!!</code></pre>
-<p>As you can see in this example, attribute <code>currsize</code> has value 2 after a call on a totally different object. This is unexpected behaviour because you would normally expect value 1 (as you want to have cache on method related to instance but not to the whole class).</p> 
+<p>As you can see in this example, attribute <code>currsize</code> has value 2 after a call on a totally different object. This is unexpected behaviour because you would normally expect value 1 (as you want to have cache on method related to instance but not to the whole class).</p>
+ 
 <h3>Decorator <code>lru_cache</code> in <code>methodtools</code> package</h3>
 <p>Fortunately, there is a simple fix for this memory-leaking <code>lru_cache</code> decorator from <code>functools</code>. That is to use a different library called <code>methodtools</code>. This library is not a system package, so you have to install it (simply using <code>pip install methodtools</code>). The behaviour of this function in <code>methodtools</code> library is exactly the same as in <code>functools</code>. The only difference is that it works correctly. Consider the following example:</p>
 <pre class="code"><code>import methodtools
@@ -111,10 +112,10 @@ print(obj_b.some_method.cache_info())
 # >>> CacheInfo(hits=0, misses=2, maxsize=3, currsize=1)
 # => Great!!! Now it works correctly.</code></pre>
 
-<p>The drawback of <code>methodtools</code> library is that it contains quite a few sub-dependencies (which can generally speaking cause issues).</p>
+<p>The drawback of the <code>methodtools</code> library is that it contains quite a few sub-dependencies (which can sometimes cause issues).</p>
 
 <h2>Summary</h2>
-<p>The article presents some theory behind caching and then practical examples of caching in Python language using <code>functools</code> and <code>methodtools</code> <code>lru_cache</code> decorator. Caching is generally helpful for making your code run faster. Of course, it is convenient to have some support functionality on the language level. It is good to know about the unexpected behaviour of <code>lru_cache</code> in <code>functools</code> (memory leaks) and the way how to overcome it. You can always easily implement your cache logic as well (as the key for dictionaries can be almost everything) and not rely on available tools.</p>
+<p>The article presents some theory behind caching and then practical examples of caching in Python language using functools and methodtools lru_cache decorator. Caching is generally helpful for making your code run faster. Of course, it is convenient to have some support functionality on the language level. In Python, it is good to know about the unexpected behaviour of lru_cache in the functools package (memory leaks) and how to overcome it. Also, if needed, you can usually quickly implement your cache logic as well - for example, the key for dictionaries can be almost everything,  so the dictionary itself can be a data structure for the cache.</p>
 """
 
 ENTITY = cr.Article(
