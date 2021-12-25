@@ -105,7 +105,8 @@ service Trolley {
 
 <p>To generate static (libraries) files, run the command:</p>
 
-<pre class="code"><code>python -m grpc_tools.protoc --proto_path=. trolley.proto --python_out=. --grpc_python_out=.</code></pre>
+<pre class="code"><code>python -m grpc_tools.protoc --proto_path=. \
+    trolley.proto --python_out=. --grpc_python_out=.</code></pre>
 
 <p>As you can see, the script generates two files (libraries):</p> 
 
