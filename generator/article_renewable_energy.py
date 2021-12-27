@@ -190,6 +190,7 @@ power = wind(v_w=10.0, D_a=1.250, A_r=10.0, L=0.1431,
 <p>Deterministic prediction using the algorithm described above is essential - but it provides the estimated value without error bounds. But many investors, banks and insurance companies are interested in the worst-case scenarios. Something that happens in probabilistic quantile like 0.9 or similar. The typical error is modelled using Gaussian multivariate distribution, reflecting spatial and temporal covariances. Large weather datasets with the high temporal resolution are required for accurate results - usually at least ten years with a resolution of ten minutes. Also, it is necessary to have some ground measurements from existing installations to predict errors.</p>
 
 <h2>Summary</h2>
+
 <p>There are many tools for predicting renewable energy from various types of installation. This post is focused only on predicting the energy from wind turbines and photovoltaic installations. The most important library for photovoltaic installation is called PVLIB. And the most important source of weather data (for long-term forecast) is ERA5. If it comes to wind turbines (aka wind energy converter), there is no comprehensive library like PVLIB, and you have to rely on basic formulas. The essential weather data source is again ERA5 (for long-term forecast). Often, it is also vital to know the error distribution of prediction. That is not always simple as the ground-based measurements from existing installations is required for modelling.</p>
 
 <h2>Useful links</h2>
