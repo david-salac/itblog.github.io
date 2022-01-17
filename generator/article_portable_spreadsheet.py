@@ -1,21 +1,25 @@
-# New Python library for exporting formulas to Excel and other formats
+# Python library for exporting formulas to Excel and other formats
 import datetime
 import crinita as cr
 
-lead = """One of the typical challenges when doing the export of numerical computations is how to include the way your computations were achieved. Typically, if results should be in an Excel sheet in the end, you want to see a computation formula if you click on each cell. There is a native method - using some Excel driver (like XlsxWriter) available in Python."""
+lead = """One of the typical challenges when exporting numerical computations is how to include the way the calculations were achieved. Typically, if results should be in an Excel sheet, you want to see a formula if you click on each cell. A naive method is using some Excel driver (like XlsxWriter) directly. But if you are dealing with a big Excel sheet (or multiple sheets in one file), this approach becomes quite inconvenient. Therefore, this article presents a library called Portable Spreadsheet - it can easily export defined formulas in Python to many formats, including Excel and JSON."""
 
-content = """One of the typical challenges when doing the export of numerical computations is how to include the way your computations were achieved. Typically, if results should be in an Excel sheet in the end, you want to see a computation formula if you click on each cell. There is a native method - using some Excel driver (like XlsxWriter) available in Python. But if you are dealing with a big Excel sheet (or multiple sheets in one file), this approach becomes quite inconvenient. We present a new library called Portable Spreadsheet - it can easily export simply defined formulas in Python to many formats including Excel, JSON, etc.
+content = """One of the typical challenges when exporting numerical computations is how to include the way the calculations were achieved. Typically, if results should be in an Excel sheet, you want to see a formula if you click on each cell. A naive method is using some Excel driver (like XlsxWriter) directly. But if you are dealing with a big Excel sheet (or multiple sheets in one file), this approach becomes quite inconvenient. Therefore, this article presents a library called Portable Spreadsheet - it can easily export defined formulas in Python to many formats, including Excel and JSON.
+
 <h2>Simple problem</h2>
-<p>Say that you have an e-shop written in Python and want to export some simple Excel sheet that summarizes revenues per each category. There can be just two columns, one representing the category and another one representing revenues. </p> 
+<p>Say that you have an e-shop written in Python and want to export some simple Excel sheet that summarizes revenues per category. There can be just two columns to simplify things, one representing the category and another representing revenue.</p> 
 
 <figure>
-<img alt="Excel" src="images/excel.png">
-<figcaption>Simple problem definition</figcaption>
+    <img alt="Figure 1: Simple problem definition" src="images/excel.png">
+    <figcaption>Figure 1: Simple problem definition</figcaption>
 </figure>
 
-<p>In the end, you want to see some aggregation functions, like the sum of all revenues, the article with minimal revenue, and say the sum of food and drinks as a new category (called grocery). What is crucial, the spreadsheet should be editable, it means, each computation should be exported as a formula (as illustrated in the figure above).</p>
-<h2>Approach using available Excel drivers</h2>
-<p>You can tackle this issue directly using some driver for Excel available in Python. Let's say you choose XlsxWriter as your driver. Then you have to define each cell value and for the computations the way how you compute it plus the actual value after the computation. The code you have to write would follow the logic:</p>
+<p>In the end, you want to see some statistics, like the sum of all revenues for each category, the minimal revenue in all categories, and say the sum of food and drinks as a new category (called grocery). What is crucial, the Spreadsheet should contain formulas and be editable. Meaning, when someone clicks on the cell, there should be a computation definition.</p>
+
+<h2>Direct approach with Excel drivers</h2>
+<p>Multiple drivers are capable of handling the XLSX 2010 format. The most important ones are XlsxWriter and openpyxl.</p>
+<h3>XlsxWriter driver</h3>
+<p>You can tackle this issue directly using some driver for Excel available in Python. Driver, in this sense, means a library that allows you to handle files in Excel format. A very simple yet effective one is XlsxWriter - the following example demonstrate how it works:</p>
 <pre class="code"><code>import xlsxwriter
 workbook = xlsxwriter.Workbook('revenues.xlsx')
 worksheet = workbook.add_worksheet()
@@ -30,9 +34,13 @@ worksheet.write(2, 0, "Headphones")
 worksheet.write(0, 1, food_rev)
 worksheet.write(1, 1, drinks_rev)
 worksheet.write(2, 1, headphones_rev)
+# Write results labels
+worksheet.write(3, 0, "Total")
+worksheet.write(4, 0, "Minimal")
+worksheet.write(5, 0, "Grocery")
 # Write results
 worksheet.write_formula(
-    3, 1, "=SUM(B1:B3)", 
+    3, 1, "=SUM(B1:B3)",
     value=(food_rev + drinks_rev + headphones_rev)
 )
 worksheet.write_formula(
@@ -42,21 +50,51 @@ worksheet.write_formula(
 worksheet.write_formula(5, 1, "=B1+B2",
                         value=food_rev + drinks_rev)
 # Close the sheet (in order to write it to the file)
-workbook.close()
-</code></pre>
+workbook.close()</code></pre>
 
-<p>As you can see the code is not simple (nor complete) and you already had to hardwire the positions of each cell in it. You also had to use values for computations multiple times as you cannot directly use the values in the cell.</p>
-<p>What more is that when you decide to export to the different format (say JSON), you have to write this code again.</p>
+<p>This code is inflexible, as all values and formulas are explicitly written into each cell. That makes code editing difficult and prone to error. The typical bug is when the values do not match the formula - Excel (or LibreOffice calc) has no way to recognize it as it only shows what is in the cell unless something is updated. Code is also quite complex, despite that example is incomplete - for example, styles are missing.</p>
+<p>Also, is that when you decide to export to a different format (say JSON), you have to write this code again.</p>
+<h3>openpyxl driver</h3>
+<p>A very similar driver is the openpyxl library (<code>pip install openpyxl</code>). This driver is slightly smarter than XlsxWriter as it allows not only writing of values but also reading from Excel files. Another advantage is the support for writing formulas without defining values - this makes code simpler. However, if you open the output in Excel, it takes longer to interpret correct values in each cell. Also, the driver works itself is slower than the XlsxWriter library. Our example would look like this:</p>
+<pre class="code"><code>import openpyxl
+workbook = openpyxl.Workbook()
+worksheet = workbook.active
+food_rev = 1000
+drinks_rev = 100
+headphones_rev = 300
+# Write categories
+worksheet["A1"] = "Food"
+worksheet["A2"] = "Drinks"
+worksheet["A3"] = "Headphones"
+# Write revenues
+worksheet["B1"] = food_rev
+worksheet["B2"] = drinks_rev
+worksheet["B3"] = headphones_rev
+# Write results labels
+worksheet["A4"] = "Total"
+worksheet["A5"] = "Minimal"
+worksheet["A6"] = "Grocery"
+# Write results
+worksheet["B4"] = "=SUM(B1:B3)"
+worksheet["B5"] = "=MIN(B1:B3)"
+worksheet["B6"] = "=B1+B2"
+# Close the sheet (in order to write it to the file)
+workbook.save('revenues1.xlsx')</code></pre>
+<p>As you can see, the code is slightly more straightforward. However, one obvious disadvantage is that cell coordinates must be passed as strings and not as matrix integer coordinates - but an internal function can help transform integer position into Excel definition. </p>
+<p>Generally, the code structure is almost identical to the previously discussed driver (with described peculiarities). Also, all described advantages and disadvantages hold even in this case.</p>
+
 <h2>Portable Spreadsheet approach</h2>
-<p>Another way how to deal with all these issues elegantly is to use a library called Portable Spreadsheet (installable easily via pip install portable-spreadsheet). Consider the following code as the opposite of the previous one:</p>
+<p>High-level object-oriented programming languages have a way to deal with the inconveniences of this type called encapsulation. In this case, commonly used constructs (like a sheet) are defined as a class with some typical operations (in our case, sum, minimal value, adding). You can then call these methods on concrete sheet objects. This is what the library called Portable Spreadsheet does.</p>
+<p>The library Portable Spreadsheet reacts to a missing package that would encapsulate the sheet. As the name suggests, it does not export only to Excel (or LibreOffice) format but also to other formats like JSON, HTML, and user-defined ones - therefore portable. Technically, it is a Python library that can easily be installed using <code>pip install portable-spreadsheet</code>. </p>
+<p>The previous example written using Portable Spreadsheet library would look like this:</p>
 
 <pre class="code"><code>import portable_spreadsheet as ps
 
 # Create the spreadsheet with the correct labels
 sheet = ps.Sheet.create_new_sheet(
     6, 1,
-    rows_labels=['Food', 'Drink', 
-                 'Headphones', 'Total', 
+    rows_labels=['Food', 'Drink',
+                 'Headphones', 'Total',
                  'Minimal', 'Grocery'],
     columns_labels=['Revenue']
 )
@@ -65,46 +103,38 @@ sheet.loc['Food', 'Revenue'] = 15000
 sheet.loc['Drink', 'Revenue'] = 16000
 sheet.loc['Headphones', 'Revenue'] = 1000
 # Set the computations
-sheet.loc['Total', 'Revenue'] = \\ 
+sheet.loc['Total', 'Revenue'] = \\
     sheet.loc['Food':'Total', 'Revenue'].sum()
-sheet.loc['Minimal', 'Revenue'] = \\ 
+sheet.loc['Minimal', 'Revenue'] = \\
     sheet.loc['Food':'Total', 'Revenue'].min()
 sheet.loc['Grocery', 'Revenue'] = (
-        sheet.loc['Food', 'Revenue'] + 
+        sheet.loc['Food', 'Revenue'] +
         sheet.loc['Drink', 'Revenue']
     )
 # Export result to Excel
 sheet.to_excel("rev.xlsx")
 # Export result to JSON
 json = sheet.to_json()</code></pre>
+<p>This example shows the fundamental logic of the Portable Spreadsheet library. The updated logic removes all redundancies (compared to the naive approach using driver directly). The concept remotely resembles Pandas DataFrame logic - you can now directly set the cell's value and use the cell in operations.</p>
 
-
-<p>As you can see, you completely removed redundancies in the code, it is shorter, easily readable, and what's best, you can export not only to Excel but to every reasonable format (JSON, CSV, HTML, etc.). If you are familiar with Pandas DataFrame concept, you can see the straight motivation.</p>
-<h3>How does it work under the hood?</h3>
-<p>Internally, the principle of the Portable Spreadsheet library lies in the word constructing algorithm. Basically, each formula (in Excel, JSON, etc.) can be considered as a world in some language. This language is the Context-Free language defined by Context-Free grammar (see Chomsky hierarchy).</p>
-<p>This practically means that all that is needed is the definition of the prefixes and suffices for each operation. Operands here are the coordinates of the cells.</p>
-<p>So, if you want to compute the sum of the items in the column, your operands are the coordinates of slice start and end, the operation is the sum (you have two inputs: operation and operands).</p>
+<h3>How does Portable Spreadsheet work?</h3>
+<p>Portable Spreadsheet internally keeps the value of each cell (either string or numerical value) and then the defining string for each cell and each language. If we say language here, it is essential to mention what it means - it is a generic concept Noam Chomsky first defined. In our case, we are talking about so-called Context-Free languages. Therefore, each formula in Excel is just a word in a language that uses particular grammar. The same holds true for JSON - which is just another Context-Free language or HTML or XML, etc.</p>
+<p>Therefore, the library defines the grammar for each language in use and allows you to describe languages. Practically, if you want to sum values in a column, you need to have a definition for summation, aggregation of values, and insertion into a formula. The picture below shows the example of this logic for summation.</p>
 
 <figure>
-<img alt="Prefixes and suffixes of operation and operands" src="images/pref_suf.png">
-<figcaption>Prefixes and suffixes of operation and operands</figcaption>
+    <img alt="Figure 2: Word construction process" src="images/ps_composition.png">
+    <figcaption>Figure 2: Word construction process</figcaption>
 </figure>
 
-<p>In the picture above, you can see prefixes and suffixes. Some prefixes and suffixes are empty sets. This picture is just an illustration, but it shows how each word can be constructed. All these prefixes and suffixes (and other rules) are defined as the grammars for each language in a separate file.</p>
-<p>The rest of the Portable Spreadsheet library is simple storing of words for each cell defined by its coordinates. Each word (like that one with the sum mentioned above) can be the part of the other word (acting as an operand). This approach allows defining grammars for each language that should be part of the export (like native language description, Python language, Excel).</p>
-
-<h2>New version of Portable Spreadsheet</h2>
-<p>There is also a new version of Portable Spreadsheet now available. It contains many enhanced features (like the possibility of speed optimization). But the main new feature is the support of outputs with multiple sheets - called Workbook. The interface for using the workbook is very intuitive - it is a container for sheets (with implemented functionality for exporting). Another enhancement is the possibility to have a custom-defined variables sheet - that is a sheet that defines variables for computations in other sheets (you can add as many columns and rows as needed with your content).</p> 
-<p>Regarding performance, the most important new feature enables you to create a sheet with values only (it means, you cannot export to Excel/JSON and other formats afterwards). That makes computations much faster. You just need to recompute all the values with proper configuration when you need them. Also, there is now a possibility to reduce the number of languages in which words are constructed - so for example, if you want to export only to Excel, you do not need to waste your computational time with other formats (this feature makes library slightly faster as well). </p>
-<p>Alas, the only way how to improve the Portable Spreadsheet library was to use an application interface that is not backwards compatible in a few ways (for example, Spreadsheet class was renamed to Sheet). There are also many new classes available (that allows the creation of outputs with multiple sheets in them). Many bugs were fixed as well (like the bug in shape property that now works correctly).</p>
+<p>Generally, each operation has its prefixes, suffices, separators and operands. The order and values of each must be specified when the operation grammar is defined. As in Excel, words (operations) can be nested, which means inserting words into another word. Practically, each language defines many operations, like aggregation functions, binary and unary operations, references to cells, and others. All the library does is compose words based on overloaded operators (or direct method calls) and keep their value for each language and cell.</p>
 
 <h2>Summary </h2>
-<p>The purpose of this article is to present a new library for Python called Portable Spreadsheet (pip install portable-spreadsheet) that allows you to easily export computation formulas in a spreadsheet to various type of formats (mainly Excel and JSON). So you can see how each computation in a spreadsheet is done without manually coding each cell. </p>
+<p>If there is a need to export data into Excel format with formulas, two options are generally available. One uses some Excel file driver directly, and another uses the Portable Spreadsheet library. If you choose to use drivers directly, there are two popular XLSX 2010 file format drivers in Python - XlsxWriter and openpyxl. The disadvantage of this approach is that the code is complex and fragile. Another option is to use the encapsulation of the driver, the Portable Spreadsheet library. It encapsulates all standard operations and allows export into multiple formats like JSON, XLSX or XML.</p>
 """
 
 ENTITY = cr.Article(
-    title="New Python library for exporting formulas to Excel and other formats",
-    url_alias='new-python-library-for-exporting-formulas-to-excel-and-other-formats',
+    title="Python library for exporting formulas to Excel and other formats",
+    url_alias='python-library-for-exporting-formulas-to-excel-and-other-formats',
     large_image_path="images/portable_spreadsheet_big.jpg",
     small_image_path="images/portable_spreadsheet_small.jpg",
     date=datetime.datetime(2020, 8, 16),
