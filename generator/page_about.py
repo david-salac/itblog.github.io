@@ -1,6 +1,6 @@
 import crinita as cr
 
-html_code = """This blog covers interesting issues in software engineering and data analysis. It mainly contains articles about issues that the author finds interesting. It would be great if all the readers leave some feedback to me (either in discussion or by email) - it is always great to have some motivation to continue.
+html_code = """<p class="lead">This blog covers interesting issues in software engineering and data analysis. It mainly contains articles about issues that the author finds interesting. It would be great if all the readers leave some feedback to me (either in discussion or by email) - it is always great to have some motivation to continue.</p>
 <h2>About author</h2>
 <p>My name is David Salac. I have a master degree in mathematics and computer science. I have more than ten years of practical experience in these fields.</p>
 <p>If you want to know more about mee, you can visit my <a href="https://www.linkedin.com/in/david-salac-12618b187/">LinkedIn profile (https://www.linkedin.com/in/david-salac-12618b187/)</a>. <em>In order to see my profile, you have to be log-in to LinkedIn due to privacy reasons.</em></p>

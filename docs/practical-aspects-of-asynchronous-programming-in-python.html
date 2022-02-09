@@ -55,7 +55,7 @@
         <div class="illustration" style="background-image: url('images/asyncio_big.jpg')"></div>
     
     <div class="content">
-        Multitasking and multiprocessing are the two main components of parallel programming. There is native support for these features in Python (CPython). But there are some limits specific to Python that have to be considered. The main problem is called GIL (Global Interpreter Lock) - which significantly reduces the number of use cases for applications in Python (mainly for creating asynchronous pipelines).
+        <p class="lead">Multitasking and multiprocessing are the two main components of parallel programming. There is native support for these features in Python (CPython). But there are some limits specific to Python that have to be considered. The main problem is called GIL (Global Interpreter Lock) - which significantly reduces the number of use cases for applications in Python (mainly for creating asynchronous pipelines).</p>
 
 <h2>What is asynchronous programming?</h2>
 <p>Asynchronous programming is based on an important concept of using threads. Thread is basically a lightweight task. The difference between task and thread is more or less formal - the operating system creates tasks as a separate entity with its own memory space while it creates threads with the shared memory. It means that the allocation and running of a thread are generally faster and less resource-hungry than the running of the task. On the other hand, tasks can be more helpful for complex algorithms (they essentially behaves as a separate program).</p>

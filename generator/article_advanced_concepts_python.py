@@ -4,7 +4,7 @@ import crinita as cr
 
 lead = """Many helpful tools available in Python are essential for effective development - some of them are less known, others are way more popular. This article presents class methods and static methods (constructs of Python), conversion from class to dictionary (and vice versa) and metaclasses and their applications. All these things are vital for beginners and mid-senior Python engineers."""
 
-content = """Many helpful tools available in Python are essential for effective development - some of them are less known, others are way more popular. This article presents class methods and static methods (constructs of Python), conversion from class to dictionary (and vice versa) and metaclasses and their applications. All these things are vital for beginners and mid-senior Python engineers.
+content = """<p class="lead">Many helpful tools available in Python are essential for effective development - some of them are less known, others are way more popular. This article presents class methods and static methods (constructs of Python), conversion from class to dictionary (and vice versa) and metaclasses and their applications. All these things are vital for beginners and mid-senior Python engineers.</p>
 
 <h2>Class and static methods (and fields)</h2>
 <p>There are two beneficial concepts in Python language called class and static method. The class method is declared using the following declaration:</p>

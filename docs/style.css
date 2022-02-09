@@ -294,6 +294,9 @@ table.std_table th, table.std_table td {
     padding: 5px;
 }
 
+.lead {
+    margin-top: 0;
+}
 
 @media only screen and (max-width: 1000px) {
   nav {

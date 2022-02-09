@@ -4,186 +4,186 @@ import crinita as cr
 
 lead = """During the last few years, we could see a revolution in entering passwords into online services (e-shops, email providers, social networks etc.). This revolution ensued in a surge of forgotten passwords. More and more users forget passwords just after entering them, leading to an increasing number of toolkits for storing passwords where each has its vulnerabilities."""
 
-content = """During the last few years, we could see a revolution in entering passwords into online services (e-shops, email providers, social networks etc.). This revolution ensued in a surge of forgotten passwords. More and more users forget passwords just after entering them, leading to an increasing number of toolkits for storing passwords where each has its vulnerabilities. But what is the reality of password security from a mathematical point of view? Does using each special character have any impact on security? How should the real secure password look like? There exist surprisingly precise and straightforward answers for all of these questions.
+content = """<p class="lead">During the last few years, we could see a revolution in entering passwords into online services (e-shops, email providers, social networks etc.). This revolution ensued in a surge of forgotten passwords. More and more users forget passwords just after entering them, leading to an increasing number of toolkits for storing passwords where each has its vulnerabilities. But what is the reality of password security from a mathematical point of view? Does using each special character have any impact on security? How should the real secure password look like? There exist surprisingly precise and straightforward answers for all of these questions.</p>
 
-        <h2>Cryptographic hash function</h2>
-        <p>After you enter the password during registration on some website, it is typically sent to the server in so-called plain text form (plain text means that it is sent as it is, without any irreversible modification). If there is no security issue on the server-side (which is not always true), the server does not store the password in a plain text form (consider that someone could hack the database and has all the available passwords). Instead, the password's hash is computed using the cryptographic hash function and stored (this process is often more difficult due to salting passwords and other techniques). Many available cryptographic hash functions have pros and cons (from a security point of view). The most popular hash functions are members of families called SHA-1, SHA-2 and SHA-3 families, and the specific hash function called MD5 (considered not to be secure).</p>
-        <p>The logic of the hash function is that if you have an input value, you can very quickly compute the output value (the hash). But if you have the output, you cannot promptly calculate the matching input. So optimally, you have to try each possible combination of the input to receive the desired result. And this operation costs a lot of time (so much that you cannot imagine, typically much more than billions of years even if you have a very powerful computer).</p>
+<h2>Cryptographic hash function</h2>
+<p>After you enter the password during registration on some website, it is typically sent to the server in so-called plain text form (plain text means that it is sent as it is, without any irreversible modification). If there is no security issue on the server-side (which is not always true), the server does not store the password in a plain text form (consider that someone could hack the database and has all the available passwords). Instead, the password's hash is computed using the cryptographic hash function and stored (this process is often more difficult due to salting passwords and other techniques). Many available cryptographic hash functions have pros and cons (from a security point of view). The most popular hash functions are members of families called SHA-1, SHA-2 and SHA-3 families, and the specific hash function called MD5 (considered not to be secure).</p>
+<p>The logic of the hash function is that if you have an input value, you can very quickly compute the output value (the hash). But if you have the output, you cannot promptly calculate the matching input. So optimally, you have to try each possible combination of the input to receive the desired result. And this operation costs a lot of time (so much that you cannot imagine, typically much more than billions of years even if you have a very powerful computer).</p>
 
-        <h3>Intermezzo: something about bits, bytes, numbers and ASCII</h3>
-        <p>Similarly, as you can play with decimal numbers, you can play with bits. You can add them, subtract them etc. What is most important in our situation is the following: consider a number composed of <em>N</em> bits. For example, <em>N</em> could be 8, 16, 48574 or any other natural number (most commonly a power of two). The question is, how many possible combinations there are in this string of <em>N</em> bits (series of digits composed of <em>N</em> ones or zeros)? For example, if <em>N</em> is 8, the combination could be 00000000, 00001001, 00000001 and so on. You can write each possible combination and count them, or you can use the following trick. Consider that you have a three-digit decimal number, then you can quickly say that it can have 1000 combinations. How could you promptly compute it? Simply, by computing 10 power to 3, where 10 is the root of our numerical system (decimal = 10). We have just two possible values in a binary system (binary = 2) in our example. So the answer to our question is that we have two power to <em>N</em> combinations. In our example, 2 power to 8 equals 256 combinations.</p>
+<h3>Intermezzo: something about bits, bytes, numbers and ASCII</h3>
+<p>Similarly, as you can play with decimal numbers, you can play with bits. You can add them, subtract them etc. What is most important in our situation is the following: consider a number composed of <em>N</em> bits. For example, <em>N</em> could be 8, 16, 48574 or any other natural number (most commonly a power of two). The question is, how many possible combinations there are in this string of <em>N</em> bits (series of digits composed of <em>N</em> ones or zeros)? For example, if <em>N</em> is 8, the combination could be 00000000, 00001001, 00000001 and so on. You can write each possible combination and count them, or you can use the following trick. Consider that you have a three-digit decimal number, then you can quickly say that it can have 1000 combinations. How could you promptly compute it? Simply, by computing 10 power to 3, where 10 is the root of our numerical system (decimal = 10). We have just two possible values in a binary system (binary = 2) in our example. So the answer to our question is that we have two power to <em>N</em> combinations. In our example, 2 power to 8 equals 256 combinations.</p>
 
-        <p>So far, so good. But can I also compute how many bits do I need if knowing the number of possible combinations (inverse task)? Yes, you can use the logarithm function base 2 (binary logarithm). There are a lot of online calculators for computing such value (or you can recall high school mathematics and identities related to logarithm). This function is essential later in this article, so please take care you understand it. It practically returns some decimal number for almost all values, so practically, you have to round it up if you want to know how many bits you need to reserve.</p>
+<p>So far, so good. But can I also compute how many bits do I need if knowing the number of possible combinations (inverse task)? Yes, you can use the logarithm function base 2 (binary logarithm). There are a lot of online calculators for computing such value (or you can recall high school mathematics and identities related to logarithm). This function is essential later in this article, so please take care you understand it. It practically returns some decimal number for almost all values, so practically, you have to round it up if you want to know how many bits you need to reserve.</p>
 
 <figure>
     <img src="images/pass_log2.gif" alt="Graph of log2(N) - you can see that logarithm increases slowly with high input values.">
     <figcaption>Figure 1: Graph of log<sub>2</sub>(<em>N</em>) - you can see that logarithm increases slowly with high input values.</figcaption>
 </figure>
 
-        <p>Well, but how can we transform normal characters, such as latter A to a number (or sequence of bits)? The answer is the ASCII table. ASCII table is a simple encoding table. At the beginning of computers, there had to be a unified way to encode each character to a particular string of bits (number in binary form) and vice versa. ASCII table contains the pairs of characters and a matching string of 8 bits (1 byte) representing this character. Thus, there are 256 characters represented in the ASCII table. If you need some special characters (symbols in Hebrew, for example), this table's successors (UTF-8, Unicode and others).</p>
+<p>Well, but how can we transform normal characters, such as latter A to a number (or sequence of bits)? The answer is the ASCII table. ASCII table is a simple encoding table. At the beginning of computers, there had to be a unified way to encode each character to a particular string of bits (number in binary form) and vice versa. ASCII table contains the pairs of characters and a matching string of 8 bits (1 byte) representing this character. Thus, there are 256 characters represented in the ASCII table. If you need some special characters (symbols in Hebrew, for example), this table's successors (UTF-8, Unicode and others).</p>
 
-        <h2>Why is all this important? Because of the Digest size.</h2>
-        <p>As mentioned above, the hash functions differ in many ways. One of the fundamental parameters of each hash function is called digest size. It is simply a number of bits that are the output of each particular hash function. The following table depicts digest sizes of the most popular hash functions:</p>
+<h2>Why is all this important? Because of the Digest size.</h2>
+<p>As mentioned above, the hash functions differ in many ways. One of the fundamental parameters of each hash function is called digest size. It is simply a number of bits that are the output of each particular hash function. The following table depicts digest sizes of the most popular hash functions:</p>
 
-        <table class="std_table">
-            <tr>
-                <th>Hash function</th><th>Variant</th><th>Digest size</th>
-            </tr>
-            <tr>
-                <td>MD5</td>
-                <td>-</td>
-                <td>128</td>
-            </tr>
-            <tr>
-                <td>SHA-1</td>
-                <td>-</td>
-                <td>160</td>
-            </tr>
-            <tr>
-                <td>SHA-2</td>
-                <td>224</td>
-                <td>224</td>
-            </tr>
-            <tr>
-                <td>SHA-2</td>
-                <td>256</td>
-                <td>256</td>
-            </tr>
-            <tr>
-                <td>SHA-2</td>
-                <td>384</td>
-                <td>384</td>
-            </tr>
-            <tr>
-                <td>SHA-2</td>
-                <td>512</td>
-                <td>512</td>
-            </tr>
-        </table>
-        
+<table class="std_table">
+    <tr>
+        <th>Hash function</th><th>Variant</th><th>Digest size</th>
+    </tr>
+    <tr>
+        <td>MD5</td>
+        <td>-</td>
+        <td>128</td>
+    </tr>
+    <tr>
+        <td>SHA-1</td>
+        <td>-</td>
+        <td>160</td>
+    </tr>
+    <tr>
+        <td>SHA-2</td>
+        <td>224</td>
+        <td>224</td>
+    </tr>
+    <tr>
+        <td>SHA-2</td>
+        <td>256</td>
+        <td>256</td>
+    </tr>
+    <tr>
+        <td>SHA-2</td>
+        <td>384</td>
+        <td>384</td>
+    </tr>
+    <tr>
+        <td>SHA-2</td>
+        <td>512</td>
+        <td>512</td>
+    </tr>
+</table>
 
-        <p>The logic is that if the input has more bits than the current digest size of the hash function, the system's security does not increase. It is the same as when you resize a picture to some smaller size and then resize it again. As a result, you always have a blurred image because you lose some data. It is then meaningful to target just as many bits of input as the digest size of the used hash function is or slightly more if necessary due to rounding.</p>
 
-        <p>To compute what is the optimal size of the input, let's remind the following:</p>
-        <ul>
-            <li>There are 26 letters in the alphabet. If we count uppercase and lowercase letters separately, it is 52 letters at all.</li>
-            <li>There is ten decimal digit. It means ten possible combinations for each character (0,1, and so on up to 9).</li>
-        </ul>
-        
-        <p>If we construct a password, we should be aware that it is just a string of characters. Each character could some limited number of accepted values:</p>
-        <ul>
-            <li>If we choose just a password with numbers, each character can have ten combinations.</li>
-            <li>If we choose just a password with lowercase latter, each character can have 26 combinations.</li>
-            <li>If we add uppercase latter, each character can have 52 combinations.</li>
-            <li>If we add numbers, each character can have 62 combinations.</li>
-            <li>If we add some special characters (typically, we can easily write just about ten special characters on the keyboard), we have 72 combinations.</li>
-        </ul>
-        <p>So what can we say about a secure password so far? First, let's go back to our base-2 logarithm. We now know how many combinations each character can have (based on how complex a password we have chosen). But how many bits could represent these numbers? The answer is the base-2 logarithm of each value:</p>
-        
-        <table class="std_table">
-            <tr>
-                <th><em>N</em></th><th>bit size = log<sub>2</sub>(<em>N</em>)</th>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>3.3219</td>
-            </tr>
-            <tr>
-                <td>26</td>
-                <td>4.7004</td>
-            </tr>
-            <tr>
-                <td>52</td>
-                <td>5.7004</td>
-            </tr>
-            <tr>
-                <td>62</td>
-                <td>5.9541</td>
-            </tr>
-            <tr>
-                <td>72</td>
-                <td>6.1699</td>
-            </tr>
-        </table>
+<p>The logic is that if the input has more bits than the current digest size of the hash function, the system's security does not increase. It is the same as when you resize a picture to some smaller size and then resize it again. As a result, you always have a blurred image because you lose some data. It is then meaningful to target just as many bits of input as the digest size of the used hash function is or slightly more if necessary due to rounding.</p>
 
-        <p>So we know the bit size of each password combination (you can check it using an online calculator). We know the desired size of the input (which is equal to the digest size). So the answer to optimal password length is simple: divide digest size by the bit size of each character (in the table) and round it up! It is really so simple if you choose a password that is bigger than the value you have computed this way, it is useless.</p>
+<p>To compute what is the optimal size of the input, let's remind the following:</p>
+<ul>
+    <li>There are 26 letters in the alphabet. If we count uppercase and lowercase letters separately, it is 52 letters at all.</li>
+    <li>There is ten decimal digit. It means ten possible combinations for each character (0,1, and so on up to 9).</li>
+</ul>
 
-        <h2>What is the optimal size of the password?</h2>
-        <p>Based on the logic described above, we have computed a simple table for you.</p>
-        <table class="std_table">
-            <tr>
-                <th>Digest size</th>
-                <th>128</th>
-                <th>160</th>
-                <th>224</th>
-                <th>256</th>
-                <th>384</th>
-                <th>512</th>
-            </tr>
-            <tr>
-                <td>Password length for numeric only</td>
-                <td>39</td>
-                <td>49</td>
-                <td>68</td>
-                <td>78</td>
-                <td>116</td>
-                <td>155</td>
-            </tr>
-            <tr>
-                <td style="padding-right: 20px;">Password length for lowercase only</td>
-                <td>28</td>
-                <td>35</td>
-                <td>48</td>
-                <td>55</td>
-                <td>82</td>
-                <td>109</td>
-            </tr>
-            <tr>
-                <td style="padding-right: 20px;">Password length for lowercase and uppercase</td>
-                <td>23</td>
-                <td>29</td>
-                <td>40</td>
-                <td>45</td>
-                <td>68</td>
-                <td>90</td>
-            </tr>
-            <tr>
-                <td style="padding-right: 20px;">Password length for lowercase, uppercase and numeric</td>
-                <td>22</td>
-                <td>27</td>
-                <td>38</td>
-                <td>43</td>
-                <td>65</td>
-                <td>86</td>
-            </tr>
-            <tr>
-                <td style="padding-right: 20px;">Password length for lowercase, uppercase, numeric and special characters</td>
-                <td>21</td>
-                <td>26</td>
-                <td>37</td>
-                <td>42</td>
-                <td>63</td>
-                <td>83</td>
-            </tr>
-        </table>
+<p>If we construct a password, we should be aware that it is just a string of characters. Each character could some limited number of accepted values:</p>
+<ul>
+    <li>If we choose just a password with numbers, each character can have ten combinations.</li>
+    <li>If we choose just a password with lowercase latter, each character can have 26 combinations.</li>
+    <li>If we add uppercase latter, each character can have 52 combinations.</li>
+    <li>If we add numbers, each character can have 62 combinations.</li>
+    <li>If we add some special characters (typically, we can easily write just about ten special characters on the keyboard), we have 72 combinations.</li>
+</ul>
+<p>So what can we say about a secure password so far? First, let's go back to our base-2 logarithm. We now know how many combinations each character can have (based on how complex a password we have chosen). But how many bits could represent these numbers? The answer is the base-2 logarithm of each value:</p>
 
-        <p>That is an adorable table, isn't it? But what does it actually say is really important:</p>
-        <ul>
-            <li>It is not meaningful to use a special character in a password (it is very difficult to remember them and write them to foreign layouts).</li>
-            <li>The sufficiently secure password to each application is 22 alphanumeric random characters.</li>
-        </ul>
-        <p>The second sentence requires some explanation because it partially contradicts the overall logic. So far, we know, our current computers are not capable of computing more than one billion complex operations per second. No known technology could increase this performance exponentially to this value. It seems to be a huge number, but it actually is not. Consider how many possible combinations does 128 bits number has? It is exactly 340,282,366,920,938,463,463,374,607,431,768,211,456 - the number that has 39 decimal digits. Consider that we use all available computers in the world to find correct input values. We have roughly about ten billion computers; each can compute a billion combinations per second (reality is, that computer is much slower, but we can ignore it now). In that case, it would take ten power to 19 seconds to find the correct value, which is more than 100,000,000,000 years. You do not have to be worried that someone will hack your password after such a long time.</p>
+<table class="std_table">
+    <tr>
+        <th><em>N</em></th><th>bit size = log<sub>2</sub>(<em>N</em>)</th>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>3.3219</td>
+    </tr>
+    <tr>
+        <td>26</td>
+        <td>4.7004</td>
+    </tr>
+    <tr>
+        <td>52</td>
+        <td>5.7004</td>
+    </tr>
+    <tr>
+        <td>62</td>
+        <td>5.9541</td>
+    </tr>
+    <tr>
+        <td>72</td>
+        <td>6.1699</td>
+    </tr>
+</table>
 
-        <p>Of course, it is critically important to mention that you have to use a really random password. A random set of characters and numbers. For example: Sz2xNgVaRmQJrkL0eEAI8H, definitely not passwords like: JoHnOhMGoDItIs2So1CooL. Be aware of this. Believe in yourself and learn one meaningfully large password! You can use only alphabetical passwords with lower and upper cases of size 23 characters. Each is equally secure.</p>
-        
-        <h2>Practical complications</h2>
-        <p>To make the situation even more complicated, almost every provider uses different validators for passwords. Some require composition that must contain a special character, some composition that must not contain it. Also, the restriction of what that special character should be differs significantly (for some providers, the exclamation mark is a good character, for another, it is not acceptable). Also, the size of the password is often restricted to insufficient size. All these restrictions make the internet even less safe place; rather than preventing hackers from success; the opposite holds is happening.</p>
-        <p>Also, it is good to be aware of many password generators that are available as free tools. Unfortunately, they often generate insufficient passwords, or their internal algorithm is not sufficient. It isn't easy to generate a random series on the computer - it is caused by the fact that all computers use a deterministic algorithm (for the same input, always the same output). That makes the situation complicated. Some tools even generate random series of words instead of characters. That is potentially dangerous because the whole word then behaves like one character (it's counterintuitive and can leave users complacent about their password).</p>
-        <p>Another issue that is worth discussing is password managers, meaning programs that store passwords. These tools are frequently very vulnerable - you usually need a master password to access it (which makes life difficult as all passwords depend on this password). So it is not surprising that hackers frequently target these programs (and very often are successful). Famously, there were troubles with FTP clients that holds passwords as a plain-text (like FileZilla or Total Commander), but also with browsers that keep passwords in this way (you know that clingy store password button). </p>
-        <p>Also, password expiry presents a severe threat to security. Nobody wants to change passwords too often. The result often is that the new password is less and less secure than the old one. As a result, people often change passwords in the loop (swap two passwords each time they are forced to change). That, of course, does not make the system more secure (in fact, quite the opposite holds true). It is mathematically reasonable to change your passwords from time to time and use a unique password for every service - but the theory often fails as it is difficult to memorize so many passwords.</p>
-        
-        <h2>Conclusions</h2>
-        <p>The main conclusion is that it is not so important whether special characters are included in your password or not. It is also not so important whether numbers are included or not. The password which is secure enough is 23 random alphabetical characters (lower and upper case). The critically important is the size of the password. Everything with less than 22 alphanumerical characters (or 23 alphabetical lower/upper case) can be considered vulnerable. Generally, try to use common sense for passwords (do not store them, try to change them reasonably often).</p>
+<p>So we know the bit size of each password combination (you can check it using an online calculator). We know the desired size of the input (which is equal to the digest size). So the answer to optimal password length is simple: divide digest size by the bit size of each character (in the table) and round it up! It is really so simple if you choose a password that is bigger than the value you have computed this way, it is useless.</p>
+
+<h2>What is the optimal size of the password?</h2>
+<p>Based on the logic described above, we have computed a simple table for you.</p>
+<table class="std_table">
+    <tr>
+        <th>Digest size</th>
+        <th>128</th>
+        <th>160</th>
+        <th>224</th>
+        <th>256</th>
+        <th>384</th>
+        <th>512</th>
+    </tr>
+    <tr>
+        <td>Password length for numeric only</td>
+        <td>39</td>
+        <td>49</td>
+        <td>68</td>
+        <td>78</td>
+        <td>116</td>
+        <td>155</td>
+    </tr>
+    <tr>
+        <td style="padding-right: 20px;">Password length for lowercase only</td>
+        <td>28</td>
+        <td>35</td>
+        <td>48</td>
+        <td>55</td>
+        <td>82</td>
+        <td>109</td>
+    </tr>
+    <tr>
+        <td style="padding-right: 20px;">Password length for lowercase and uppercase</td>
+        <td>23</td>
+        <td>29</td>
+        <td>40</td>
+        <td>45</td>
+        <td>68</td>
+        <td>90</td>
+    </tr>
+    <tr>
+        <td style="padding-right: 20px;">Password length for lowercase, uppercase and numeric</td>
+        <td>22</td>
+        <td>27</td>
+        <td>38</td>
+        <td>43</td>
+        <td>65</td>
+        <td>86</td>
+    </tr>
+    <tr>
+        <td style="padding-right: 20px;">Password length for lowercase, uppercase, numeric and special characters</td>
+        <td>21</td>
+        <td>26</td>
+        <td>37</td>
+        <td>42</td>
+        <td>63</td>
+        <td>83</td>
+    </tr>
+</table>
+
+<p>That is an adorable table, isn't it? But what does it actually say is really important:</p>
+<ul>
+    <li>It is not meaningful to use a special character in a password (it is very difficult to remember them and write them to foreign layouts).</li>
+    <li>The sufficiently secure password to each application is 22 alphanumeric random characters.</li>
+</ul>
+<p>The second sentence requires some explanation because it partially contradicts the overall logic. So far, we know, our current computers are not capable of computing more than one billion complex operations per second. No known technology could increase this performance exponentially to this value. It seems to be a huge number, but it actually is not. Consider how many possible combinations does 128 bits number has? It is exactly 340,282,366,920,938,463,463,374,607,431,768,211,456 - the number that has 39 decimal digits. Consider that we use all available computers in the world to find correct input values. We have roughly about ten billion computers; each can compute a billion combinations per second (reality is, that computer is much slower, but we can ignore it now). In that case, it would take ten power to 19 seconds to find the correct value, which is more than 100,000,000,000 years. You do not have to be worried that someone will hack your password after such a long time.</p>
+
+<p>Of course, it is critically important to mention that you have to use a really random password. A random set of characters and numbers. For example: Sz2xNgVaRmQJrkL0eEAI8H, definitely not passwords like: JoHnOhMGoDItIs2So1CooL. Be aware of this. Believe in yourself and learn one meaningfully large password! You can use only alphabetical passwords with lower and upper cases of size 23 characters. Each is equally secure.</p>
+
+<h2>Practical complications</h2>
+<p>To make the situation even more complicated, almost every provider uses different validators for passwords. Some require composition that must contain a special character, some composition that must not contain it. Also, the restriction of what that special character should be differs significantly (for some providers, the exclamation mark is a good character, for another, it is not acceptable). Also, the size of the password is often restricted to insufficient size. All these restrictions make the internet even less safe place; rather than preventing hackers from success; the opposite holds is happening.</p>
+<p>Also, it is good to be aware of many password generators that are available as free tools. Unfortunately, they often generate insufficient passwords, or their internal algorithm is not sufficient. It isn't easy to generate a random series on the computer - it is caused by the fact that all computers use a deterministic algorithm (for the same input, always the same output). That makes the situation complicated. Some tools even generate random series of words instead of characters. That is potentially dangerous because the whole word then behaves like one character (it's counterintuitive and can leave users complacent about their password).</p>
+<p>Another issue that is worth discussing is password managers, meaning programs that store passwords. These tools are frequently very vulnerable - you usually need a master password to access it (which makes life difficult as all passwords depend on this password). So it is not surprising that hackers frequently target these programs (and very often are successful). Famously, there were troubles with FTP clients that holds passwords as a plain-text (like FileZilla or Total Commander), but also with browsers that keep passwords in this way (you know that clingy store password button). </p>
+<p>Also, password expiry presents a severe threat to security. Nobody wants to change passwords too often. The result often is that the new password is less and less secure than the old one. As a result, people often change passwords in the loop (swap two passwords each time they are forced to change). That, of course, does not make the system more secure (in fact, quite the opposite holds true). It is mathematically reasonable to change your passwords from time to time and use a unique password for every service - but the theory often fails as it is difficult to memorize so many passwords.</p>
+
+<h2>Conclusions</h2>
+<p>The main conclusion is that it is not so important whether special characters are included in your password or not. It is also not so important whether numbers are included or not. The password which is secure enough is 23 random alphabetical characters (lower and upper case). The critically important is the size of the password. Everything with less than 22 alphanumerical characters (or 23 alphabetical lower/upper case) can be considered vulnerable. Generally, try to use common sense for passwords (do not store them, try to change them reasonably often).</p>
 """
 
 ENTITY = cr.Article(

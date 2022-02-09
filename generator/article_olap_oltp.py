@@ -4,7 +4,7 @@ import crinita as cr
 
 lead = """It is more than ordinary that organizations that work with big data have two absolutely separated teams - one team responsible for processing data (data scientists) and another for writing and designing applications for end-users (that formally should use that data). It is equally common that technical problems in one universe are incomprehensible to people in another one. Not very surprisingly, the split leads to many problems."""
 
-content = """It is more than ordinary that organizations that work with big data have two absolutely separated teams - one team responsible for processing data (data scientists) and another for writing and designing applications for end-users (that formally should use that data). It is equally common that technical problems in one universe are incomprehensible to people in another one. Not very surprisingly, the split leads to many problems.
+content = """<p class="lead">It is more than ordinary that organizations that work with big data have two absolutely separated teams - one team responsible for processing data (data scientists) and another for writing and designing applications for end-users (that formally should use that data). It is equally common that technical problems in one universe are incomprehensible to people in another one. Not very surprisingly, the split leads to many problems.</p>
 
 <h2>OLAP and OLTP</h2>
 <p>The header of this subsection should probably be OLAP vs OLTP - but that would only emphasize the schism (when, in theory, there should not be any). Maybe it is time to clarify the terms for better understanding.</p> 
