@@ -1,11 +1,11 @@
 # Suitable ways to generate complex static websites in Python
 import datetime
 import crinita as cr
-import html
+from .utils import Utilities
 
 lead = """There are many interesting use-cases for generating static websites. They reach from a specific website (like documentation) to a general-purpose application (like cached images of e-shops, blogs, etc.). The main advantage of a static website is the simplicity of the product, almost no requirements to infrastructure (even GitHub can host them) and security. Many technologies help to generate static websites, from complex frameworks to simple generators."""
 
-example_template = html.escape(r"""<!DOCTYPE html>
+example_template = Utilities.string_to_html_series(r"""<!DOCTYPE html>
 <html lang="{{ language }}">
     <head>
         <title>{{ title }}</title>
@@ -29,7 +29,7 @@ example_template = html.escape(r"""<!DOCTYPE html>
     </body>
 </html>""")
 
-script_example = html.escape(r"""import jinja2
+script_example = Utilities.string_to_html_series(r"""import jinja2
 import pathlib
 
 # Set paths to directoris
@@ -56,7 +56,7 @@ with PATH_TEMPL.joinpath('page.templ').open('r') as tem_han:
     with PATH_OUTPUT.joinpath('page.html').open('w') as fp:
         fp.write(html_str)""")
 
-crinita_json = html.escape(r"""{
+crinita_json = Utilities.string_to_html_series(r"""{
   "tag_cloud_template": "__DEFAULT__",
   "menu_template": "__DEFAULT__",
   "recent_posts_template": "__DEFAULT__",

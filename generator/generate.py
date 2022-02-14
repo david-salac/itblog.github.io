@@ -5,8 +5,13 @@ from typing import List, Union
 import pkgutil
 from os import listdir
 from urllib import parse
+import logging
 
 import crinita as cr
+
+from utils import Utilities
+
+LOGGER = logging.getLogger(__name__)
 
 # Iterate through all entities
 ENTITIES: List[Union[cr.Page, cr.Article]] = []
@@ -85,3 +90,19 @@ sites.generate_pages(output_directory)
 sites.archive(
     Path(f"../backup/backup_{datetime.datetime.now().strftime('%Y-%m-%d')}")
 )
+
+# Build to LaTeX
+if True:
+    # Requirement: lxml
+    from build_latex_doc import build_latex_doc
+    # Set not to convert HTML tags in code:
+    Utilities.CONVERT_HTML_CHARACTERS = False
+    for idx, entity in enumerate(ENTITIES):  # TODO: use 'sites'
+        print(idx + 1, entity.title)
+        if isinstance(entity, cr.Article):
+            with Path('../latex', f'{entity.url_alias}.tex').open('w') as fp:
+                fp.write(
+                    build_latex_doc(
+                        entity.content, entity.title
+                    )
+                )

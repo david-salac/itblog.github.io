@@ -28,7 +28,7 @@ content = """<p class="lead">Virtual environments are a beneficial concept that 
 <ol>
 <li><p>The virtual environment has to be created. Use the command:</p>
 <pre class="code"><code>python3 -m venv PATH</code></pre>
-<p>Where the <strontg>PATH</strontg> argument is typically equal to '.' (current folder).</p>
+<p>Where the <strong>PATH</strong> argument is typically equal to '.' (current folder).</p>
 </li>
 <li><p>After the creation, you have to activate it. Go to the folder where the virtual environment is located and write:</p>
 <pre class="code"><code>. bin/activate</code></pre>
@@ -63,11 +63,11 @@ pip install -r requirements.txt
 <li><code>pip install virtualenvwrapper-win</code></li>
 <li><code>mkvirtualenv 'PATH_TO_VENV'</code></li>
 <li><code>cd PATH_TO_VENV</code></li>
-<li><code>Set-ExecutionPolicy AllSigned</code> <em>(press Y and Enter)</em></li>
-<li><code>Set-ExecutionPolicy RemoteSigned</code> <em>(press Y and Enter)</em></li>
-<li><code>.\\Scripts\\activate</code> <em>(this activate your virtual environment)</em></li>
+<li><code>Set-ExecutionPolicy AllSigned</code> <em class="text">(press Y and Enter)</em></li>
+<li><code>Set-ExecutionPolicy RemoteSigned</code> <em class="text">(press Y and Enter)</em></li>
+<li><code>.\\Scripts\\activate</code> <em class="text">(this activate your virtual environment)</em></li>
 <li><strong>use the virtual environment as needed now...</strong></li>
-<li><code>deactivate</code> <em>(to exit)</em></li>
+<li><code>deactivate</code> <em class="text">(to exit)</em></li>
 </ol>
 
 <p>Using Python interpreter is otherwise the same for Windows for Linux (be aware of using different slashes). So once you are in a Virtual Environment, you can proceed as when you were on your deployment machine.</p>

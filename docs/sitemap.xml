@@ -42,15 +42,7 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/suitable-ways-to-generate-complex-static-websites-in-python.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/how-to-replace-gdal-with-more-efficient-tools.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/dimension-order-problem-when-storing-big-data.html</loc>
   </url>
 
   <url>
@@ -146,27 +138,11 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-python-page-2.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-performance.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-performance-page-1.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-performance-page-2.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-programming.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-programming-page-1.html</loc>
   </url>
 
   <url>
@@ -178,11 +154,19 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-web-application.html</loc>
+    <loc>https://itblog.uk/tag-programming.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-programming-page-1.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-big-data.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-web-application.html</loc>
   </url>
 
   <url>
@@ -191,10 +175,6 @@
 
   <url>
     <loc>https://itblog.uk/tag-security.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-netcdf.html</loc>
   </url>
 
   <url>
@@ -210,6 +190,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-netcdf.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-project-management.html</loc>
   </url>
 
@@ -218,15 +202,7 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-crinita.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-devops.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-dimension.html</loc>
   </url>
 
   <url>

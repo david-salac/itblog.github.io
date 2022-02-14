@@ -4,7 +4,7 @@ import crinita as cr
 
 lead = """In-memory database REDIS provides a simple interface for caching various data types. In addition, it supports simple manipulations with arrays and scalar values, including support for complex data constructs (like queues). What is, however not implemented, is the support of multi-dimensional objects. These objects are beneficial if you need to cache frequently used constants (or interim results) for computations (like matrices)."""
 
-content = """<p class="lead">In-memory database REDIS provides a simple interface for caching various data types. In addition, it supports simple manipulations with arrays and scalar values, including support for complex data constructs (like queues). What is, however not implemented, is the support of multi-dimensional objects. These objects are beneficial if you need to cache frequently used constants (or interim results) for computations (like matrices). There, however, exist a simple way to circumvent this obstacle.</p>
+content = r"""<p class="lead">In-memory database REDIS provides a simple interface for caching various data types. In addition, it supports simple manipulations with arrays and scalar values, including support for complex data constructs (like queues). What is, however not implemented, is the support of multi-dimensional objects. These objects are beneficial if you need to cache frequently used constants (or interim results) for computations (like matrices). There, however, exist a simple way to circumvent this obstacle.</p>
 
 <h2>Using Pandas DataFrame with REDIS</h2>
 <p>DataFrame in Pandas library represents a popular way how to store 2D structures in Python. It provides a useful encapsulation of NumPy n-dimensional arrays that supports things like labels for columns and rows and SQL-like operations with DataFrame objects. However, it also has well-known problems, mainly related to low performance and frequent changes in API. But despite its problems, Pandas DataFrame popularity is unquestionable. To create a DataFrame object, you first need to install Pandas (<code>pip install pandas</code>), then use the following logic:</p>
@@ -53,7 +53,7 @@ These examples illustrate the most straightforward way of how to store data in R
 <h3>Performance analysis</h3>
 <p>We performed basic measurements of the time required to fetch data from memory and deserialize them to the DataFrame object. The processor Intel Xeon CPU E5-2673 v4 @ 2.30 GHz has been used during measurement. Data are depicted in the following table:</p>
 
-<table class="std_table">
+<table class="std_table having-3-columns">
 <tr><th>Number of entities </th><th> Time [s] </th><th> Standard deviation of time [s]</th></tr>
 <tr><td>100,000 </td><td> 0.003 </td><td> 0.002</td></tr>
 <tr><td>500,000  </td><td> 0.016  </td><td> 0.005</td></tr>
