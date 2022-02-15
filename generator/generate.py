@@ -91,18 +91,28 @@ sites.archive(
     Path(f"../backup/backup_{datetime.datetime.now().strftime('%Y-%m-%d')}")
 )
 
+
 # Build to LaTeX
-if True:
+def build_to_tex():
     # Requirement: lxml
     from build_latex_doc import build_latex_doc
+    from latex_config import LaTeXConfig
+    LaTeXConfig.DOCUMENT_START = '\n\n'
+    LaTeXConfig.DOCUMENT_END = '\n\n'
     # Set not to convert HTML tags in code:
     Utilities.CONVERT_HTML_CHARACTERS = False
-    for idx, entity in enumerate(ENTITIES):  # TODO: use 'sites'
-        print(idx + 1, entity.title)
-        if isinstance(entity, cr.Article):
-            with Path('../latex', f'{entity.url_alias}.tex').open('w') as fp:
-                fp.write(
-                    build_latex_doc(
-                        entity.content, entity.title
-                    )
+    for idx, entity in enumerate(sites.list_of_articles):  # TODO: use 'sites'
+        pos = str(idx + 1).zfill(2)
+        #print(pos, entity.title)
+        print(r'\include{Chapters/Chapter%s}' % pos)
+        with Path(
+            LaTeXConfig.OUTPUT_DIRECTORY, f'Chapter{pos}.tex'
+        ).open('w') as fp:
+            fp.write(
+                build_latex_doc(
+                    entity.content, entity.title
                 )
+            )
+
+
+build_to_tex()

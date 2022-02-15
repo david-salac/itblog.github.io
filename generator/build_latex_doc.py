@@ -2,6 +2,9 @@ from lxml import etree
 from io import StringIO
 
 
+from latex_config import LaTeXConfig
+
+
 def find_all(search_for: str, where: str) -> list[int]:
     """Find all ocurences of substring in the string
     Args:
@@ -41,6 +44,8 @@ def tex_cleaning(html_code: str) -> tuple[str, list[str]]:
     html = html.replace('</code></pre>', '</code-block>')
     html = html.replace("<!-- LATEX ", '<latex-code>')
     html = html.replace(" LATEX -->", '</latex-code>')
+    # Change GIF to PNG
+    html = html.replace(".gif", '.png')
 
     # Parse all em blocks as italic text:
     if "<!-- LATEX-ALL-EM-AS-TEXT -->" in html:
@@ -51,7 +56,9 @@ def tex_cleaning(html_code: str) -> tuple[str, list[str]]:
     code_blocks: list[str] = []
     for st, en in zip(find_all('<code-block>', html),
                       find_all('</code-block>', html)):
-        code_blocks.append(html[st + len("<code-block>"):en])
+        code_block = html[st + len("<code-block>"):en]
+        code_block = code_block.replace('$', '\\$')
+        code_blocks.append(code_block)
     # Replace underscore
     html = html.replace('_', '\\_')
     html = html.replace('#', '\\#')
@@ -217,33 +224,9 @@ def build_latex_doc(html: str, doc_title: str) -> str:
     root = tree.getroot()
     latex = html2latex(root)
     # Prepare docs
-    docs_start: str = r"""\documentclass[12pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-
-% Formating:
-% \usepackage{times}
-\usepackage{fancyvrb}
-% To include images
-\usepackage{graphicx}
-\usepackage{float}
-
-% No word splitting:
-\tolerance=1
-\emergencystretch=\maxdimen
-\hyphenpenalty=10000
-\hbadness=10000
-
-% Quotation marks
-\usepackage{upquote}
-
-"""
+    docs_start: str = LaTeXConfig.DOCUMENT_START
     # Write results to file
     return "".join([docs_start,
-                    r"\title{" + doc_title + "}\n",
-                    r'\begin{document}',
-                    '\\begin{flushleft}\\textbf{\LARGE\n\\raggedright %s }\\end{flushleft}\n\n' % doc_title,
+                    '\\chapter{%s}\n' % doc_title,
                     latex,
-                    r"\end{document}"])
+                    LaTeXConfig.DOCUMENT_END])

@@ -46,6 +46,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/dimension-order-problem-when-storing-big-data.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/python-library-for-exporting-formulas-to-excel-and-other-formats.html</loc>
   </url>
 
@@ -130,19 +134,23 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-python.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-python-page-1.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-performance.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-performance-page-1.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-performance-page-2.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-python.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-python-page-1.html</loc>
   </url>
 
   <url>
@@ -178,6 +186,10 @@
   </url>
 
   <url>
+    <loc>https://itblog.uk/tag-netcdf.html</loc>
+  </url>
+
+  <url>
     <loc>https://itblog.uk/tag-cryptosystem.html</loc>
   </url>
 
@@ -190,10 +202,6 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-netcdf.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-project-management.html</loc>
   </url>
 
@@ -203,6 +211,10 @@
 
   <url>
     <loc>https://itblog.uk/tag-devops.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-dimension.html</loc>
   </url>
 
   <url>

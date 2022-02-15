@@ -112,6 +112,8 @@ content = """<p class="lead">At the beginning of each project, you should know y
 <h4><em>System attributes</em></h4>
 <p><em>This subsection defines requirements related to reliability, availability and security of the system. </em></p>
 
+<!-- LATEX ~ LATEX -->
+
 <p>Information related to verification and all other additional information can be added here in the form of appendices (or independent sections, if you prefer).</p>
 
 <h2>A suggested way for defining requirements</h2>

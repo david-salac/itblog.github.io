@@ -65,7 +65,7 @@ pip install -r requirements.txt
 <li><code>cd PATH_TO_VENV</code></li>
 <li><code>Set-ExecutionPolicy AllSigned</code> <em class="text">(press Y and Enter)</em></li>
 <li><code>Set-ExecutionPolicy RemoteSigned</code> <em class="text">(press Y and Enter)</em></li>
-<li><code>.\\Scripts\\activate</code> <em class="text">(this activate your virtual environment)</em></li>
+<li><code>.<span class="math">\\</span><!-- LATEX \\\\ LATEX -->Scripts<span class="math">\\</span><!-- LATEX \\\\ LATEX -->activate</code> <em class="text">(this activate your virtual environment)</em></li>
 <li><strong>use the virtual environment as needed now...</strong></li>
 <li><code>deactivate</code> <em class="text">(to exit)</em></li>
 </ol>
@@ -80,7 +80,7 @@ pip install -r requirements.txt
 <p>Technically speaking, Anaconda is a distribution of Python (it uses the native CPython interpreter, which you can easily install on your system). However, be aware that the Anaconda is proprietary software (there are commercial and free versions available).</p>
 
 <h2>Virtual environments in IDE</h2>
-<p>Your life will be much easier when you choose to use some good IDE for your coding work. One great IDE is JetBrains PyCharm (freely available on all platforms, including Windows, Linux, macOS). There is a straightforward way to manage an interpreter's dependencies, among other helpful things. You can manage your dependencies in PyCharm when you go File &#8594; Settings then in tab Project: NAME &#8594; Python Interpreter. Here you can see a list of installed dependencies (with their versions). Click on the plus (+) sign on the bottom to add a new dependency. You can easily find and install any dependency (in whatever version) you need. Internally, PyCharm uses the PyPi repository for finding packages.</p>
+<p>Your life will be much easier when you choose to use some good IDE for your coding work. One great IDE is JetBrains PyCharm (freely available on all platforms, including Windows, Linux, macOS). There is a straightforward way to manage an interpreter's dependencies, among other helpful things. You can manage your dependencies in PyCharm when you go File <span class="math">&#8594;</span><!-- LATEX $ \\rightarrow $ LATEX --> Settings then in tab Project: NAME <span class="math">&#8594;</span><!-- LATEX $ \\rightarrow $ LATEX --> Python Interpreter. Here you can see a list of installed dependencies (with their versions). Click on the plus (+) sign on the bottom to add a new dependency. You can easily find and install any dependency (in whatever version) you need. Internally, PyCharm uses the PyPi repository for finding packages.</p>
 
 <figure>
     <img src="images/venv_pycharm.gif" alt="Figure 1: Screen of the PyCharm requirements window.">
