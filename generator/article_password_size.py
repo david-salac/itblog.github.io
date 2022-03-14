@@ -4,20 +4,20 @@ import crinita as cr
 
 lead = """During the last few years, we could see a revolution in entering passwords into online services (e-shops, email providers, social networks etc.). This revolution ensued in a surge of forgotten passwords. More and more users forget passwords just after entering them, leading to an increasing number of toolkits for storing passwords where each has its vulnerabilities."""
 
-content = """<p class="lead">During the last few years, we could see a revolution in entering passwords into online services (e-shops, email providers, social networks etc.). This revolution ensued in a surge of forgotten passwords. More and more users forget passwords just after entering them, leading to an increasing number of toolkits for storing passwords where each has its vulnerabilities. But what is the reality of password security from a mathematical point of view? Does using each special character have any impact on security? How should the real secure password look like? There exist surprisingly precise and straightforward answers for all of these questions.</p>
+content = r"""<p class="lead">During the last few years, we could see a revolution in entering passwords into online services (e-shops, email providers, social networks etc.). This revolution ensued in a surge of forgotten passwords. More and more users forget passwords just after entering them, leading to an increasing number of toolkits for storing passwords where each has its vulnerabilities. But what is the reality of password security from a mathematical point of view? Does using each special character have any impact on security? How should the real secure password look like? There exist surprisingly precise and straightforward answers for all of these questions.</p>
 
 <h2>Cryptographic hash function</h2>
 <p>After you enter the password during registration on some website, it is typically sent to the server in so-called plain text form (plain text means that it is sent as it is, without any irreversible modification). If there is no security issue on the server-side (which is not always true), the server does not store the password in a plain text form (consider that someone could hack the database and has all the available passwords). Instead, the password's hash is computed using the cryptographic hash function and stored (this process is often more difficult due to salting passwords and other techniques). Many available cryptographic hash functions have pros and cons (from a security point of view). The most popular hash functions are members of families called SHA-1, SHA-2 and SHA-3 families, and the specific hash function called MD5 (considered not to be secure).</p>
 <p>The logic of the hash function is that if you have an input value, you can very quickly compute the output value (the hash). But if you have the output, you cannot promptly calculate the matching input. So optimally, you have to try each possible combination of the input to receive the desired result. And this operation costs a lot of time (so much that you cannot imagine, typically much more than billions of years even if you have a very powerful computer).</p>
 
 <h3>Intermezzo: something about bits, bytes, numbers and ASCII</h3>
-<p>Similarly, as you can play with decimal numbers, you can play with bits. You can add them, subtract them etc. What is most important in our situation is the following: consider a number composed of <em>N</em> bits. For example, <em>N</em> could be 8, 16, 48574 or any other natural number (most commonly a power of two). The question is, how many possible combinations there are in this string of <em>N</em> bits (series of digits composed of <em>N</em> ones or zeros)? For example, if <em>N</em> is 8, the combination could be 00000000, 00001001, 00000001 and so on. You can write each possible combination and count them, or you can use the following trick. Consider that you have a three-digit decimal number, then you can quickly say that it can have 1000 combinations. How could you promptly compute it? Simply, by computing 10 power to 3, where 10 is the root of our numerical system (decimal = 10). We have just two possible values in a binary system (binary = 2) in our example. So the answer to our question is that we have two power to <em>N</em> combinations. In our example, 2 power to 8 equals 256 combinations.</p>
+<p>Similarly, as you can play with decimal numbers, you can play with bits. You can add them, subtract them etc. What is most important in our situation is the following: consider a number composed of <em class="equation">N</em> bits. For example, <em class="equation">N</em> could be 8, 16, 48574 or any other natural number (most commonly a power of two). The question is, how many possible combinations there are in this string of <em class="equation">N</em> bits (series of digits composed of <em class="equation">N</em> ones or zeros)? For example, if <em class="equation">N</em> is 8, the combination could be 00000000, 00001001, 00000001 and so on. You can write each possible combination and count them, or you can use the following trick. Consider that you have a three-digit decimal number, then you can quickly say that it can have 1000 combinations. How could you promptly compute it? Simply, by computing 10 power to 3, where 10 is the root of our numerical system (decimal = 10). We have just two possible values in a binary system (binary = 2) in our example. So the answer to our question is that we have two power to <em class="equation">N</em> combinations. In our example, 2 power to 8 equals 256 combinations.</p>
 
 <p>So far, so good. But can I also compute how many bits do I need if knowing the number of possible combinations (inverse task)? Yes, you can use the logarithm function base 2 (binary logarithm). There are a lot of online calculators for computing such value (or you can recall high school mathematics and identities related to logarithm). This function is essential later in this article, so please take care you understand it. It practically returns some decimal number for almost all values, so practically, you have to round it up if you want to know how many bits you need to reserve.</p>
 
 <figure>
     <img src="images/pass_log2.gif" alt="Graph of log2(N) - you can see that logarithm increases slowly with high input values.">
-    <figcaption>Figure 1: Graph of log<sub>2</sub>(<em>N</em>) - you can see that logarithm increases slowly with high input values.</figcaption>
+    <figcaption>Figure 1: Graph of <span class="math">log<sub>2</sub>(<em>N</em>)</span><!-- LATEX $ \log_2(N) $ LATEX --> - you can see that logarithm increases slowly with high input values.</figcaption>
 </figure>
 
 <p>Well, but how can we transform normal characters, such as latter A to a number (or sequence of bits)? The answer is the ASCII table. ASCII table is a simple encoding table. At the beginning of computers, there had to be a unified way to encode each character to a particular string of bits (number in binary form) and vice versa. ASCII table contains the pairs of characters and a matching string of 8 bits (1 byte) representing this character. Thus, there are 256 characters represented in the ASCII table. If you need some special characters (symbols in Hebrew, for example), this table's successors (UTF-8, Unicode and others).</p>
@@ -25,7 +25,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
 <h2>Why is all this important? Because of the Digest size.</h2>
 <p>As mentioned above, the hash functions differ in many ways. One of the fundamental parameters of each hash function is called digest size. It is simply a number of bits that are the output of each particular hash function. The following table depicts digest sizes of the most popular hash functions:</p>
 
-<table class="std_table">
+<table class="std_table having-3-columns">
     <tr>
         <th>Hash function</th><th>Variant</th><th>Digest size</th>
     </tr>
@@ -80,9 +80,9 @@ content = """<p class="lead">During the last few years, we could see a revolutio
 </ul>
 <p>So what can we say about a secure password so far? First, let's go back to our base-2 logarithm. We now know how many combinations each character can have (based on how complex a password we have chosen). But how many bits could represent these numbers? The answer is the base-2 logarithm of each value:</p>
 
-<table class="std_table">
+<table class="std_table having-2-columns">
     <tr>
-        <th><em>N</em></th><th>bit size = log<sub>2</sub>(<em>N</em>)</th>
+        <th><em class="equation">N</em></th><th>bit size = <span class="math">log<sub>2</sub>(<em>N</em>)</span><!-- LATEX $ \log_2(N) $ LATEX --></th>
     </tr>
     <tr>
         <td>10</td>
@@ -110,7 +110,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
 
 <h2>What is the optimal size of the password?</h2>
 <p>Based on the logic described above, we have computed a simple table for you.</p>
-<table class="std_table">
+<table class="std_table having-7-columns">
     <tr>
         <th>Digest size</th>
         <th>128</th>
@@ -121,7 +121,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
         <th>512</th>
     </tr>
     <tr>
-        <td>Password length for numeric only</td>
+        <td>Numeric only</td>
         <td>39</td>
         <td>49</td>
         <td>68</td>
@@ -130,7 +130,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
         <td>155</td>
     </tr>
     <tr>
-        <td style="padding-right: 20px;">Password length for lowercase only</td>
+        <td style="padding-right: 20px;">Lowercase only</td>
         <td>28</td>
         <td>35</td>
         <td>48</td>
@@ -139,7 +139,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
         <td>109</td>
     </tr>
     <tr>
-        <td style="padding-right: 20px;">Password length for lowercase and uppercase</td>
+        <td style="padding-right: 20px;">Lowercase and uppercase</td>
         <td>23</td>
         <td>29</td>
         <td>40</td>
@@ -148,7 +148,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
         <td>90</td>
     </tr>
     <tr>
-        <td style="padding-right: 20px;">Password length for lowercase, uppercase and numeric</td>
+        <td style="padding-right: 20px;">Lowercase, uppercase and numeric</td>
         <td>22</td>
         <td>27</td>
         <td>38</td>
@@ -157,7 +157,7 @@ content = """<p class="lead">During the last few years, we could see a revolutio
         <td>86</td>
     </tr>
     <tr>
-        <td style="padding-right: 20px;">Password length for lowercase, uppercase, numeric and special characters</td>
+        <td style="padding-right: 20px;"><span class="math">Lowercase, uppercase, numeric and special characters</span><!-- LATEX \begin{tabular}[x]{@{}c@{}}Lowercase, uppercase, numeric\\and special characters\end{tabular} LATEX --></td>
         <td>21</td>
         <td>26</td>
         <td>37</td>

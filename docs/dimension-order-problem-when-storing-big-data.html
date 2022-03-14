@@ -71,17 +71,25 @@
 <p>The third case is the most problematic one. There is only one rule: keep the order of the dimensions from the least varying to the most varying. The rationale for this is the same as described above (data are in the end just a one-dimensional series). However, there are many exceptional cases when even this rule is not the best to follow (see use case bellow).</p>
 
 <h2>How are data stored technically?</h2>
-<p>As mentioned above, data are technically stored in just one dimension. This raises the question of how it is possible to store multidimensional data to just one dimension and reconstruct them? The answer is simpler than one might think. Suppose you have just three dimensions of sizes (<em>l</em><sub>1</sub>, <em>l</em><sub>2</sub>, <em>l</em><sub>3</sub>). Then each point <em>P</em> has coordinates (<em>p</em><sub>1</sub>, <em>p</em><sub>2</sub>, <em>p</em><sub>3</sub>) - always indexed from 0 to <em>l</em><sub>i</sub> (right excluded). You can easily map these three coordinates to just one coordinate, say <em>q</em>, by using the relation:</p>
-<p class="center">
+<p>As mentioned above, data are technically stored in just one dimension. This raises the question of how it is possible to store multidimensional data to just one dimension and reconstruct them? The answer is simpler than one might think. Suppose you have just three dimensions of sizes (<span class="math"><em>l</em><sub>1</sub>, <em>l</em><sub>2</sub>, <em>l</em><sub>3</sub></span><!-- LATEX $l_1, l_2, l_3$ LATEX -->). Then each point <em class="math">P</em> <!-- LATEX $P$ LATEX --> has coordinates (<span class="math"><em>p</em><sub>1</sub>, <em>p</em><sub>2</sub>, <em>p</em><sub>3</sub></span><!-- LATEX $p_1, p_2, p_3$ LATEX -->) - always indexed from 0 to <span class="math"><em>l</em><sub>i</sub></span><!-- LATEX $l_i$ LATEX --> (right excluded). You can easily map these three coordinates to just one coordinate, say <em class="math">q</em><!-- LATEX $q$ LATEX -->, by using the relation:</p>
+<p class="center math">
     <em>q</em> = <em>p</em><sub>1</sub> + <em>l</em><sub>1</sub> &#8901; <em>p</em><sub>2</sub> + <em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub> &#8901; <em>p</em><sub>3</sub>
 </p>
+<!-- LATEX 
+$$q = p_1 + l_1 p_2 + l_1  l_2  p_3 $$
+ LATEX -->
 <p>draw a cube and try it practically if you do not believe it. And a similar relation is usable for the inverse mapping (from one dimension to three dimensions):</p>
-<p class="center">
+<p class="center math">
     <em>p</em><sub>3</sub> = FLOOR(<em>q</em> / (<em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub>))<br>
     <em>p</em><sub>2</sub> = FLOOR((<em>q</em> - <em>p</em><sub>3</sub> &#8901; <em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub>) / <em>l</em><sub>1</sub>)<br>
     <em>p</em><sub>1</sub> = <em>q</em> - <em>p</em><sub>3</sub> &#8901; <em>l</em><sub>1</sub> &#8901; <em>l</em><sub>2</sub> - <em>p</em><sub>2</sub> &#8901; <em>l</em><sub>1</sub>
 </p>
-<p>where FLOOR is the floor function (take just the integer part, ignore the decimal one).</p>
+<!-- LATEX 
+$$p_3 = \left\lfloor \frac{q}{l_1 l_2} \right\rfloor$$
+$$p_2 = \left\lfloor \frac{q - p_3 l_1 l_2}{l_1} \right\rfloor$$
+$$p_1 = q - p_3 l_1 l_2 - p_2 l_1 $$
+ LATEX -->
+<p>where <span class="math">FLOOR</span><!-- LATEX $\left\lfloor \cdots \right\rfloor$ LATEX --> is the floor function (take just the integer part, ignore the decimal one).</p>
 <p>The same logic can be used for any number of dimensions. Although it can be quite problematic for more than three dimensions, there is no simple way to imagine that problem geometrically.</p>
 
 <h2>Use case</h2>
@@ -141,13 +149,13 @@
     
         <li><a href="tag-design.html ">Design</a></li>
     
-        <li><a href="tag-python.html ">Python</a></li>
-    
         <li><a href="tag-performance.html ">Performance</a></li>
     
-        <li><a href="tag-programming.html ">Programming</a></li>
+        <li><a href="tag-python.html ">Python</a></li>
     
         <li><a href="tag-essentials.html ">Essentials</a></li>
+    
+        <li><a href="tag-programming.html ">Programming</a></li>
     
 </ul>
 <div class="clear"></div>

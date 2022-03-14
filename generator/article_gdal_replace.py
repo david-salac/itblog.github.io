@@ -58,7 +58,7 @@ atr_content = ds.ATTRIBUTE_NAME
 attr_var = ds['VAR_NAME'].ATRIBUTE_NAME
 </code></pre>
 
-<p>To see what is inside the netCDF file, a free tool called Panoply netCDF, HDF and GRIB Data Viewer (developed by NASA) is available. In addition, some typical use cases (like reading time variables) are described in the article <em>Pros and Cons of using xarray when accessing NetCDF files</em>.</p>
+<p>To see what is inside the netCDF file, a free tool called Panoply netCDF, HDF and GRIB Data Viewer (developed by NASA) is available. In addition, some typical use cases (like reading time variables) are described in the article <em class="text">Pros and Cons of using xarray when accessing NetCDF files</em>.</p>
 
 <h2>Shapefiles</h2>
 <p>Last but not least in the series of essential file types is the shapefile (*.shp). This file helps define some geometry boundaries (incredibly helpful for non-polygonial geometries). It is also one of the most popular formats in geospatial engineering. The typical use case, in this instance, is to check if some geometry has an intersection with the geometry defined by the file. A handy library to proceed with such validation is called geopandas (which offers many other tools as well and is incredibly helpful).</p>

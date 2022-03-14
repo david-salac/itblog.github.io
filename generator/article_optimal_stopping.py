@@ -4,9 +4,9 @@ import crinita as cr
 
 lead = """The optimal stopping is one of the most important topics in pure (theoretical) mathematics with many impacts in real life. It gives you an optimal pattern of how to approach many situations. It includes hiring a new employee, renting a flat, selling a house, finding your next love or just searching for a parking place. Despite the horrendous name, the underpinning logic is relatively simple."""
 
-content = """<p class="lead">The optimal stopping is one of the most important topics in pure (theoretical) mathematics with many impacts in real life. It gives you an optimal pattern of how to approach many situations. It includes hiring a new employee, renting a flat, selling a house, finding your next love or just searching for a parking place. Despite the horrendous name, the underpinning logic is relatively simple.</p>
+content = r"""<p class="lead">The optimal stopping is one of the most important topics in pure (theoretical) mathematics with many impacts in real life. It gives you an optimal pattern of how to approach many situations. It includes hiring a new employee, renting a flat, selling a house, finding your next love or just searching for a parking place. Despite the horrendous name, the underpinning logic is relatively simple.</p>
 
-<h2>Explore & exploit dilemma</h2>
+<h2>Explore and exploit dilemma</h2>
 <p>This dilemma is the core of our class of problems. Imagine the following problem: you want to rent a new flat. But, as things are, you have to decide right after the viewing if you're going to rent it or not. In other words, you cannot visit, say ten flats and decide which one is the best and then rent it - because someone else has already taken it. If you live in a bigger city, this usually is the case. So there is a big dilemma - how many flats should you view to have some comparison (exploring phase) and when should you start with renting (exploiting phase).</p> 
 
 <h2>No-information games (aka Games of Incomplete Information)</h2>
@@ -44,11 +44,11 @@ content = """<p class="lead">The optimal stopping is one of the most important t
 <h3>The simplest case: no penalty</h3>
 <p>Suppose that we want to hire the best candidate based on his score on the test. And (importantly) we are in no rush in this process (it means there is no price if we reject any candidate). Importantly, we cannot change our decision later once we reject a candidate. Then, if you envision interviewing 30 candidates, follow the pattern:</p>
 <ol>
-<li>Hire the first candidate if his score is better than 96.666 per cent (1&nbsp;-&nbsp;1/30)</li>
-<li>Hire the second candidate if his score is better than 96.665 per cent (1&nbsp;-&nbsp;1/29)</li>
-<li>Generally, hire the <em>n</em>-th candidate (indexed from zero) if his score is better than 1&nbsp;-&nbsp;1/(30&nbsp;-&nbsp;<em>n</em>).</li>
+<li>Hire the first candidate if his score is better than 96.666 per cent <span class="math">(1&nbsp;-&nbsp;1/30)</span><!-- LATEX $ \left( 1 - \frac{1}{30} \right) $ LATEX --></li>
+<li>Hire the second candidate if his score is better than 96.665 per cent <span class="math">(1&nbsp;-&nbsp;1/29)</span><!-- LATEX $ \left( 1 - \frac{1}{29} \right) $ LATEX --></li>
+<li>Generally, hire the <em class="equation">n</em>-th candidate (indexed from zero) if his score is better than <span class="math">1&nbsp;-&nbsp;1/(30&nbsp;-&nbsp;<em>n</em>)</span><!-- LATEX $ 1 - \frac{1}{30 - n} $ LATEX -->.</li>
 </ol>
-<p>As you can see, the general rule for <em>n</em>-th candidate (indexed from zero, so the first one is <em>n</em> = 0) out of <em>K</em> envisioned candidate (<em>K</em> is our number 30 in the example above) is: hire the <em>n</em>-th candidate if his score is better than 1&nbsp;-&nbsp;1&nbsp;/&nbsp;(<em>K</em>&nbsp;-&nbsp;<em>n</em>).</p>
+<p>As you can see, the general rule for <em class="equation">n</em>-th candidate (indexed from zero, so the first one is <span class="math"><em>n</em> = 0</span><!-- LATEX $ n=0 $ LATEX -->) out of <em class="equation">K</em> envisioned candidate (<em class="equation">K</em> is our number 30 in the example above) is: hire the <em class="equation">n</em>-th candidate if his score is better than <span class="math">1&nbsp;-&nbsp;1&nbsp;/&nbsp;(<em>K</em>&nbsp;-&nbsp;<em>n</em>)</span><!-- LATEX $ 1 - \frac{1}{K - n} $ LATEX -->.</p>
 
 <h3>More complicated situation: there is a potential penalty</h3>
 <p>This is the most common case - say that you want to rent your house. Objective (measured) criteria here are defined by the monthly rent your tenant is willing to pay. But there is also some penalty - the longer you search for a tenant, the more you pay for an empty house (for example, if you have a mortgage or utility bills).</p>
@@ -57,15 +57,19 @@ content = """<p class="lead">The optimal stopping is one of the most important t
 <h3>Bomb Squad dilemma (aka burglar dilemma)</h3>
 <p>Suppose that we have the following problem: a burglar knows that the probability that someone catches him is about 20 per cent. So how many houses can he pick to have a likelihood of being caught below 50 per cent?</p>
 <p>As you can see in this problem, you know everything needed. The only thing is, how many places can a burglar visit? The solution is the maximal n in the equation:</p>
-<p class="center">(1 - 0.2)<sup><em>n</em></sup> > 0.5</p>
-<p>In other words, if the probability that someone catches burglar is <em>p</em> (our 20 per cent) and the desired probability of being cached is <em>q</em> (our 50 per cent), the equation has the form:</p>
-<p class="center">(1 - <em>p</em>)<sup><em>n</em></sup> > <em>q</em></p>
+<p class="center math">(1 - 0.2)<sup><em>n</em></sup> > 0.5</p>
+<!-- LATEX $$ \left(1 - 0.2\right)^n > 0.5 $$ LATEX -->
+<p>In other words, if the probability that someone catches burglar is <em class="equation">p</em> (our 20 per cent) and the desired probability of being cached is <em class="equation">q</em> (our 50 per cent), the equation has the form:</p>
+<p class="center math">(1 - <em>p</em>)<sup><em>n</em></sup> > <em>q</em></p>
+<!-- LATEX $$ (1-p)^n > q $$ LATEX -->
 <p>To solve this issue you can use a simple logarithm (or just try all options). The solution has the form:</p>
-<p class="center"><em>n</em> = floor(log(<em>q</em>) / log(1 - <em>p</em>)))</p>
-<p>The floor function is the lowest part of the number (rounding down). For our case, it gives <em>n</em>&nbsp;=&nbsp;3, which means that bulgar can rob three houses with a probability of 50 per cent of being caught.</p>
+<p class="center math"><em>n</em> = floor(log(<em>q</em>) / log(1 - <em>p</em>)))</p>
+<!-- LATEX $$ n = \left\lfloor \frac{\log(q)}{\log (1-p)} \right\rfloor $$ LATEX -->
+<p>The floor function is the lowest part of the number (rounding down). For our case, it gives <span class="math"><em>n</em>&nbsp;=&nbsp;3</span><!-- LATEX $ n = 3 $ LATEX -->, which means that bulgar can rob three houses with a probability of 50 per cent of being caught.</p>
 <h2>Summary</h2>
 <p>This article discusses a fascinating problem called optimal stopping. It demonstrates the most common use-cases. The most common case is searching for a new employee (aka secretary problem or 37 per cent rule), then there is some generalisation presented (for example searching for a flat). Another class of problems is also discussed - the significant difference for this case is that we have a norm (we can measure how good something is in an absolute way, not just by comparison to another entity). Another interesting problem related to optimal stopping is a burglar dilemma (or Bomb Squad dilemma). It is about the number of secure attempts in some risky activity that can be performed.</p>
 """
+
 
 ENTITY = cr.Article(
     title="Optimal stopping: pure mathematics in real life",  # noqa: E501

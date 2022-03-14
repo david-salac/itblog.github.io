@@ -42,10 +42,6 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/suitable-ways-to-generate-complex-static-websites-in-python.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/how-to-replace-gdal-with-more-efficient-tools.html</loc>
   </url>
 
@@ -138,18 +134,6 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-python.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-python-page-1.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-python-page-2.html</loc>
-  </url>
-
-  <url>
     <loc>https://itblog.uk/tag-performance.html</loc>
   </url>
 
@@ -162,11 +146,11 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-programming.html</loc>
+    <loc>https://itblog.uk/tag-python.html</loc>
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-programming-page-1.html</loc>
+    <loc>https://itblog.uk/tag-python-page-1.html</loc>
   </url>
 
   <url>
@@ -178,11 +162,19 @@
   </url>
 
   <url>
-    <loc>https://itblog.uk/tag-web-application.html</loc>
+    <loc>https://itblog.uk/tag-programming.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-programming-page-1.html</loc>
   </url>
 
   <url>
     <loc>https://itblog.uk/tag-big-data.html</loc>
+  </url>
+
+  <url>
+    <loc>https://itblog.uk/tag-web-application.html</loc>
   </url>
 
   <url>
@@ -215,10 +207,6 @@
 
   <url>
     <loc>https://itblog.uk/tag-renewable-energy.html</loc>
-  </url>
-
-  <url>
-    <loc>https://itblog.uk/tag-crinita.html</loc>
   </url>
 
   <url>
